@@ -99,4 +99,3 @@ Simply add the wikimedia commons name or the image url in the DATA: IMG section.
 - The Peruvian coastal valleys, the Tiber, the Karkheh, the Ghaggar–Hakra and a
   few others are schematic courses, as noted above.
 - Coastlines are simplified for file size and look blocky at the deepest zoom.
-- Xianyang & Haojing has no image on Wikipedia; its card says so.
