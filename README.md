@@ -5,7 +5,7 @@ civilizations that grew up along them — 33 river systems and 79 cities and
 cultures, from the Supe valley in Peru to the Yellow River bend, spanning
 10,000 BCE to 1600 CE.
 
-**Live map: https://USERNAME.github.io/REPO/**
+**Live map: https://rnrand.github.io/river-civs/**
 
 Water is drawn as the brightest thing on the page, because that is the
 argument the map is making. A timeline along the bottom sweeps from 10,000 BCE
@@ -60,7 +60,7 @@ edits happen. See [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## Contributing
 
-Sites, corrections, better images and missing rivers are all welcome. The short
+Sites, corrections, better images, and missing rivers are all welcome. The short
 version:
 
 ```sh
@@ -73,6 +73,9 @@ request that just edits the data is perfectly welcome without it.
 
 Open a pull request. CI runs the same validator. Dates and population
 estimates need a source in the PR description.
+
+Better images of cities, from Wikipedia or elsewhere, are particularly welcome!
+Simply add the wikimedia commons name or the image url in the DATA: IMG section.
 
 ## Sources and licensing
 
