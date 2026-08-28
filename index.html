@@ -570,22 +570,30 @@ window.MODERN = [
 
 <!-- ===================== DATA: IMG ===================== -->
 <script data-block="IMG">
-/* Manual image overrides.
+/* MANUAL IMAGE OVERRIDES  —  edit this map to change any picture.
 
-   Key   = the site name exactly as it appears in the SITES block.
+   Key   = the site name exactly as it appears on the map ('Babylon').
    Value = one of:
-     'https://…/photo.jpg'                     any direct image URL
-     'File:Ishtar Gate.jpg'                    any Wikimedia Commons file name
-     ['File:Ishtar Gate.jpg', 'My caption']    file (or URL) plus a caption
-     false                                     show no picture for this site
+     'https://…/photo.jpg'          any direct image URL
+     'File:Ishtar Gate.jpg'         any Wikimedia Commons file name
+     ['File:Ishtar Gate.jpg','Reconstructed Ishtar Gate, Berlin']
+                                    file (or URL) plus your own caption
+     false                          show no picture at all for this site
 
-   An override is tried first; the automatic Wikipedia image stays as a
-   backup, so a typo degrades rather than blanking the card. Run
-   imageAudit() in the browser console to list sites with no image. */
+   An override is tried first; if it fails to load, the automatic
+   Wikipedia image is used as a backup. Run imageAudit() in the browser
+   console to list every site that has no Wikipedia image.
+   =================================================================== */
 window.IMG = {
   'Sechín Alto': ['File:Sechín Archaeological site - relief (warrior).jpg',
                   'Carved warrior at neighbouring Cerro Sechín'],
   'Paithan': ['File:Coin of Satkarni.jpg', 'Satavahana coin of Satakarni'],
+  'Memphis': ['File:Pyramid_of_Djoser.jpg', 'Pyramid of Djoser'],
+  'Ur': ['File:Ziggurat_of_UrInbound1427286134917083377.jpg', 'Ziggurat of Ur'],
+  'Uruk': ['File:White_Temple_ziggurat_in_Uruk.jpg', 'White Temple ziggurat in Uruk'],
+  'Dashly Oasis': ['File:Compartmented_Seal_with_Bird-Headed_Man_with_Snakes_LACMA_AC1995.5.6.jpg','Bird-headed man with snakes from the Bactria–Margiana Archaeological Complex'],
+  'Pataliputra': ['File:Ruins_of_Patliputra_at_Kumhrar.JPG', 'Ruins of Pataliputra at Kumhrar'],
+  'Sri Ksetra': ['File:20160810_Bawbawgyi_Pogoda_Sri_Ksetra_Pyay_Myanmar_9252.jpg', 'Baw Baw Gyi Paya Buddhist stūpa']
   // 'Uruk': 'File:Uruk Archaeologial site at Warka, Iraq MOD 45156521.jpg',
   // 'Caral': ['https://example.com/caral.jpg', 'Pyramid at Caral, Supe valley'],
   // 'Ganweriwala': false,
