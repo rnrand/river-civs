@@ -109,13 +109,29 @@ for (const [name, v] of Object.entries(IMG)) {
 
 /* ---------- optional: do the Wikipedia slugs resolve? ---------- */
 if (process.argv.includes('--check-links')) {
+  const UA = { 'User-Agent': 'rivers-map-validate/1.0 (github.com/rnrand/river-civs)' };
+  const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+
+  /* Wikipedia throttles bursts. Retry on 429 and 5xx, and never fail the build
+     over rate limiting — only a real 404 means the data is wrong. */
+  async function api(url, tries = 4) {
+    for (let i = 0; i < tries; i++) {
+      const r = await fetch(url, { headers: UA });
+      if (r.status !== 429 && r.status < 500) return r;
+      await sleep(1000 * Math.pow(2, i));
+    }
+    return null;
+  }
+
   const API = 'https://en.wikipedia.org/api/rest_v1/page/summary/';
   let noImage = 0;
   for (const s of SITES) {
     const url = API + encodeURIComponent(s.w) + '?redirect=true';
     try {
-      const r = await fetch(url, { headers: { 'User-Agent': 'rivers-map-validate/1.0' } });
-      if (!r.ok) { bad(`site "${s.n}": Wikipedia slug "${s.w}" returned ${r.status}`); continue; }
+      const r = await api(url);
+      if (!r) { warn(`site "${s.n}": rate limited, "${s.w}" not checked`); continue; }
+      if (r.status === 404) { bad(`site "${s.n}": Wikipedia article "${s.w}" does not exist`); continue; }
+      if (!r.ok) { warn(`site "${s.n}": "${s.w}" returned ${r.status}`); continue; }
       const j = await r.json();
       if (j.type === 'disambiguation')
         warn(`site "${s.n}": slug "${s.w}" is a disambiguation page`);
@@ -123,10 +139,35 @@ if (process.argv.includes('--check-links')) {
     } catch (e) {
       warn(`site "${s.n}": could not check "${s.w}" (${e.message})`);
     }
-    await new Promise((r) => setTimeout(r, 120));   // be polite to the API
+    await sleep(250);
   }
   console.log(`${noImage} of ${SITES.length} sites have no lead image on Wikipedia ` +
               `(the map falls back to the article's media list, then the IMG block).`);
+
+  /* Do the hand-picked images in the IMG block still exist? */
+  const FILE_API = 'https://en.wikipedia.org/w/api.php?action=query&format=json' +
+                   '&prop=imageinfo&iiprop=url|size&titles=';
+  for (const [site, v] of Object.entries(IMG)) {
+    if (v === false) continue;
+    const val = Array.isArray(v) ? v[0] : v;
+    if (/^https?:/i.test(val)) {
+      warn(`image override "${site}": direct URL, not checked (${val})`);
+      continue;
+    }
+    const title = 'File:' + String(val).replace(/^\s*(File|Image)\s*:\s*/i, '');
+    try {
+      const r = await api(FILE_API + encodeURIComponent(title));
+      if (!r || !r.ok) { warn(`image override "${site}": ${title} not checked`); continue; }
+      const j = await r.json();
+      const page = Object.values(j.query.pages)[0];
+      if (!page.imageinfo) bad(`image override "${site}": ${title} does not exist`);
+      else if (page.imageinfo[0].width < 500)
+        warn(`image override "${site}": ${title} is only ${page.imageinfo[0].width}px wide`);
+    } catch (e) {
+      warn(`image override "${site}": could not check ${title} (${e.message})`);
+    }
+    await sleep(250);
+  }
 }
 
 /* ---------- report ---------- */
