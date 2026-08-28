@@ -594,9 +594,7 @@ window.IMG = {
   'Dashly Oasis': ['File:Compartmented_Seal_with_Bird-Headed_Man_with_Snakes_LACMA_AC1995.5.6.jpg','Bird-headed man with snakes from the Bactria–Margiana Archaeological Complex'],
   'Pataliputra': ['File:Ruins_of_Patliputra_at_Kumhrar.JPG', 'Ruins of Pataliputra at Kumhrar'],
   'Sri Ksetra': ['File:20160810_Bawbawgyi_Pogoda_Sri_Ksetra_Pyay_Myanmar_9252.jpg', 'Baw Baw Gyi Paya Buddhist stūpa']
-  // 'Uruk': 'File:Uruk Archaeologial site at Warka, Iraq MOD 45156521.jpg',
-  // 'Caral': ['https://example.com/caral.jpg', 'Pyramid at Caral, Supe valley'],
-  // 'Ganweriwala': false,
+  // 'Ganweriwala': false,      // use false to show no picture at all
 };
 </script>
 
@@ -642,6 +640,14 @@ function fatal(msg, detail) {
   document.body.appendChild(d);
 }
 
+/* Opening animation. Both are independent of each other, and both are
+   skipped automatically when the browser asks for reduced motion.
+     DRAW_ON_LOAD   rivers draw themselves in and the cities bloom
+     SWEEP_ON_LOAD  the timeline sweeps from 10,000 BCE forward
+   The "Sweep time" button always works regardless. */
+const DRAW_ON_LOAD  = false;
+const SWEEP_ON_LOAD = false;
+
 const BLOCKS = {GEO: 'GEO (generated geometry)', CRADLES: 'RIVERS', SITES: 'SITES',
                 MODERN: 'MODERN', IMG: 'IMG'};
 const missing = Object.keys(BLOCKS).filter(k => !window[k]);
@@ -651,12 +657,25 @@ if (missing.length) {
   throw new Error('Bad data blocks: ' + missing.map(k => BLOCKS[k]).join(', '));
 }
 
-/* Report an unexpected runtime error on screen too, rather than dying quietly. */
+/* Some embedded viewers stub out parts of console, so route everything through
+   one guarded helper. */
+const say = (method, ...args) => {
+  try {
+    const fn = (typeof console !== 'undefined') &&
+               (console[method] || console.log || console.info);
+    if (typeof fn === 'function') fn.apply(console, args);
+  } catch (e) { /* a missing console is never worth failing over */ }
+};
+
+/* Report an error that stops the map from starting. Once it is up and running,
+   a stray exception should not blank out a working map. */
+let booted = false;
 addEventListener('error', (e) => {
   if (e.target && e.target !== window) return;      // ignore failed images
-  fatal('Something in the page threw an error. If you are opening index.html ' +
-        'directly from disk, try serving it instead. Otherwise please report this ' +
-        'with your browser version.', (e.message || '') + (e.filename ? '\n' + e.filename + ':' + e.lineno : ''));
+  const detail = (e.message || '') + (e.filename ? '\n' + e.filename + ':' + e.lineno : '');
+  if (booted) { say('warn', 'Rivers map: ' + detail); return; }
+  fatal('Something in the page threw an error before the map finished loading. ' +
+        'Please report this with your browser version.', detail);
 });
 
 /* ============ cradles: river systems ============ */
@@ -1210,14 +1229,14 @@ window.imageAudit=async function(){
       override:ov.off?'hidden':(ov.urls.length?'set':'')});
   }
   const gaps=rows.filter(r=>r.wikipediaImage==='NONE');
-  console.table(rows);
-  console.info(gaps.length+' of '+SITE.length+' sites have no Wikipedia image: '
+  say('table', rows);
+  say('info', gaps.length+' of '+SITE.length+' sites have no Wikipedia image: '
     +gaps.map(r=>r.site).join(', ')
-    +'. Add entries to the IMG map at the top of the script to supply your own.');
+    +'. Add entries to the IMG block to supply your own.');
   return rows;
 };
-console.info('%cRivers first, cities after','font-weight:bold',
-  '\u2014 to change a photograph, edit the IMG map at the top of the <script> block. Run imageAudit() to list sites with no image.');
+say('info', '%cRivers first, cities after', 'font-weight:bold',
+  '\u2014 to change a photograph, edit the IMG data block in this file. Run imageAudit() to list sites with no image.');
 
 /* ============ boot ============ */
 $('#tally').innerHTML=Object.keys(CRADLE).length+' river systems &middot; '+SITE.length+' cities and cultures<br>10,000 BCE &ndash; 1600 CE';
@@ -1228,8 +1247,10 @@ fit(false);
 addEventListener('resize',()=>fit(false));
 
 function clearDash(){BASEPATHS.forEach(p=>{p.style.strokeDasharray='';p.style.strokeDashoffset='';p.style.transition='none'});apply(false)}
-if(reduce){
+if(reduce || !DRAW_ON_LOAD){
   clearDash();
+  if(SWEEP_ON_LOAD && !reduce)play(9000);
+  booted = true;
 }else{
   gMark.classList.add('bloom');
   requestAnimationFrame(()=>{
@@ -1239,7 +1260,8 @@ if(reduce){
       gMark.classList.remove('bloom');
       MK.forEach(s=>{s._dot.style.transitionDelay=(s._i*0.012).toFixed(2)+'s'});
       setTimeout(clearDash,1700);
-      play(9000);
+      if(SWEEP_ON_LOAD)play(9000);
+      booted = true;
       setTimeout(()=>MK.forEach(s=>s._dot.style.transitionDelay=''),1600);
     },1250);
   });
