@@ -84,6 +84,31 @@ for (const s of SITES) {
     warn(`${at}: role "${s.role}" is long for the card`);
 }
 
+/* Is each site anywhere near the river it claims? This catches the class of bug
+   where a data source has several rivers of the same name on different
+   continents and the wrong one gets picked up. */
+const KM_PER_DEG = 111.32;
+function kmToRiver(site) {
+  const segs = GEO.rivers[site.r] || [];
+  let best = Infinity;
+  const cos = Math.cos((site.la * Math.PI) / 180);
+  for (const seg of segs) {
+    for (const [lo, la] of seg) {
+      const dx = (lo - site.lo) * cos, dy = la - site.la;
+      const d = Math.sqrt(dx * dx + dy * dy) * KM_PER_DEG;
+      if (d < best) best = d;
+    }
+  }
+  return best;
+}
+for (const s of SITES) {
+  const d = kmToRiver(s);
+  if (!isFinite(d)) continue;                       // missing geometry reported above
+  if (d > 500) bad(`site "${s.n}" is ${Math.round(d)} km from the nearest point of ` +
+                   `"${s.r}" — wrong river, or wrong geometry for that river`);
+  else if (d > 150) warn(`site "${s.n}" is ${Math.round(d)} km from "${s.r}"`);
+}
+
 /* every river should carry at least one site */
 for (const key of RIVER_KEYS) {
   if (!SITES.some((s) => s.r === key)) bad(`river "${key}" has no sites`);
