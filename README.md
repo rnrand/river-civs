@@ -1,14 +1,18 @@
-# Rivers first, cities after
+# Rivers and Civilizations
 
 An interactive world map of the ancient world's major rivers and the
-civilizations that grew up along them — 33 river systems and 79 cities and
+civilizations that grew up along them — 40 river systems and 85 cities and
 cultures, from the Supe valley in Peru to the Yellow River bend, spanning
 10,000 BCE to 1600 CE.
 
-**Live map: https://rnrand.github.io/river-civs/**
+The claim is the modest one: most early civilizations grew where a river slowed
+and dropped its silt. Not all of them did, and [SCOPE.md](SCOPE.md) sets out the
+inclusion criterion, the notable exclusions, and how far the pattern actually
+holds.
 
-Water is drawn as the brightest thing on the page, because that is the
-argument the map is making. A timeline along the bottom sweeps from 10,000 BCE
+**Live map: https://USERNAME.github.io/REPO/**
+
+Water is drawn as the brightest thing on the page. A timeline along the bottom sweeps from 10,000 BCE
 forward, lighting each city as it is founded and dimming it when it ends —
 stop at 2534 BCE and you get the Bronze Age world exactly: Mesopotamia, Egypt,
 the Indus, and Caral on the Peruvian coast, all lit at once.
@@ -48,8 +52,8 @@ Inside `index.html`, the data sits in labelled blocks near the bottom, above the
 code:
 
 ```html
-<script data-block="SITES">    the 79 ancient cities and cultures
-<script data-block="RIVERS">   the 33 river systems
+<script data-block="SITES">    the 85 ancient cities and cultures
+<script data-block="RIVERS">   the 40 river systems
 <script data-block="MODERN">   modern cities on the same rivers
 <script data-block="IMG">      manual image overrides
 <script data-block="GEO">      GENERATED geometry — do not hand-edit
@@ -60,7 +64,7 @@ edits happen. See [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## Contributing
 
-Sites, corrections, better images, and missing rivers are all welcome. The short
+Sites, corrections, better images and missing rivers are all welcome. The short
 version:
 
 ```sh
@@ -73,9 +77,6 @@ request that just edits the data is perfectly welcome without it.
 
 Open a pull request. CI runs the same validator. Dates and population
 estimates need a source in the PR description.
-
-Better images of cities, from Wikipedia or elsewhere, are particularly welcome!
-Simply add the wikimedia commons name or the image url in the DATA: IMG section.
 
 ## Sources and licensing
 
@@ -99,3 +100,7 @@ Simply add the wikimedia commons name or the image url in the DATA: IMG section.
 - The Peruvian coastal valleys, the Tiber, the Karkheh, the Ghaggar–Hakra and a
   few others are schematic courses, as noted above.
 - Coastlines are simplified for file size and look blocky at the deepest zoom.
+- Xianyang & Haojing has no image on Wikipedia; its card says so.
+- Seven of the smaller river courses — the San Juan Teotihuacan, Mosna, Atoyac,
+  Río Grande de Nasca, Musi, Çarşamba and Pulvar — are hand-digitised and
+  approximate, like the Peruvian coastal valleys.
