@@ -10,7 +10,7 @@ and dropped its silt. Not all of them did, and [SCOPE.md](SCOPE.md) sets out the
 inclusion criterion, the notable exclusions, and how far the pattern actually
 holds.
 
-**Live map: https://USERNAME.github.io/REPO/**
+**Live map: https://rnrand.github.io/river-civs/**
 
 Water is drawn as the brightest thing on the page. A timeline along the bottom sweeps from 10,000 BCE
 forward, lighting each city as it is founded and dimming it when it ends —
@@ -64,7 +64,7 @@ edits happen. See [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## Contributing
 
-Sites, corrections, better images and missing rivers are all welcome. The short
+Sites, corrections, better images, and missing rivers are all welcome. The short
 version:
 
 ```sh
@@ -100,7 +100,6 @@ estimates need a source in the PR description.
 - The Peruvian coastal valleys, the Tiber, the Karkheh, the Ghaggar–Hakra and a
   few others are schematic courses, as noted above.
 - Coastlines are simplified for file size and look blocky at the deepest zoom.
-- Xianyang & Haojing has no image on Wikipedia; its card says so.
 - Seven of the smaller river courses — the San Juan Teotihuacan, Mosna, Atoyac,
   Río Grande de Nasca, Musi, Çarşamba and Pulvar — are hand-digitised and
   approximate, like the Peruvian coastal valleys.
