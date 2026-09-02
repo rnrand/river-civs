@@ -26,7 +26,7 @@ are set out below, with candidates, in case the map is ever extended. Modern
 cities appear only as an optional overlay, to show which of these rivers are
 still inhabited.
 
-## Included sites (84 across 42 river systems)
+## Included sites (86 across 43 river systems)
 
 ### Africa
 **The Nile** — Memphis (3100 BCE–600 CE), Kerma (2500–1450 BCE), Thebes
@@ -73,6 +73,7 @@ Pataliputra (490 BCE–550 CE).
 ### Europe
 **The Danube** — Lepenski Vir (9000–6000 BCE), Vinča (5700–4500 BCE).
 **The Tiber** — Rome (753 BCE–476 CE).
+**The Po** — Poviglio (1650–1150 BCE), Spina (530–250 BCE).
 
 ### North America
 **Mississippi & Ohio** — Poverty Point (1700–1100 BCE), Newark Earthworks
@@ -191,7 +192,7 @@ Neither river, lake nor sea. Several employed some of the most sophisticated wat
   between a city and its water, not to measure. They are accurate
   enough to show the relationship between a city and its water, not to measure.
 - **Coastlines are simplified** for file size and look blocky at deep zoom.
-- **Significance tiers are editorial.** 38 of 84 sites are marked capital or
+- **Significance tiers are editorial.** 38 of 86 sites are marked capital or
   metropolis, which is arguably too many.
 - **Coverage follows scholarship and language.** Sub-Saharan Africa (3 sites),
   Southeast Asia (5) and Central Asia (4) are thin because of excavation history
@@ -201,5 +202,6 @@ Neither river, lake nor sea. Several employed some of the most sophisticated wat
 - **Population figures are estimates**, marked `est.`, with contested ones
   labelled. Dates are the span the map shows, not claims about precise founding
   years.
-- **Europe holds three sites**, which reflects the criteria rather than an
-  oversight: European urbanism is largely Mediterranean and maritime.
+- **Europe holds five sites**, which reflects the criteria rather than an
+  oversight: European urbanism is largely Mediterranean and maritime, so most of
+  it falls under the sea and ocean table above rather than on the map. 
