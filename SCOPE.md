@@ -103,7 +103,7 @@ Pataliputra (490 BCE–550 CE).
 
 ## Sites filed loosely
 
-Some entries meet the criteria as civilizations while sitting well away from the
+Some entries meet the criteria as cities and towns while sitting well away from the
 channel they are filed under. The validator reports any site more than 150 km
 from its river's geometry, so these surface on every run.
 
@@ -121,8 +121,8 @@ from its river's geometry, so these surface on every run.
 ## Lake and inland-sea settlements
 
 Mechanically the closest relatives of river sites: predictable water, fertile
-shorelines, fish, and boat transport. One is already on the map — Tiwanaku and
-Pukara at Lake Titicaca — so extending the map to lakes would be a small step.
+shorelines, fish, and boat transport. Two such site is already on the map — Tiwanaku and
+Pukara at Lake Titicaca, where the former is on the Desaguadero River.
 
 | Settlement | Water | Dates | Why it qualifies |
 |---|---|---|---|
@@ -174,38 +174,6 @@ the most sophisticated water engineering anywhere.
 | Chaco Canyon, Mesa Verde | Dry farming, seeps, check dams, an intermittent wash | 600–1300 CE |
 | Steppe pastoralists | Mobile herding; no permanent settlement | 3300 BCE onward |
 
-## Rivers and early cities: the scholarly picture
-
-Of the six or so regions where states appear to have formed without a model to
-copy, four are unambiguously riverine — Mesopotamia, Egypt, the Indus, the
-Yellow River. Mesoamerica is split: the Olmec are riverine, but Maya urbanism
-ran on reservoirs in karst with no surface rivers, and Teotihuacan on springs in
-a lake basin. The Andes is the most debated case, since Michael Moseley's
-*Maritime Foundations of Andean Civilization* (1975) argued that the Peruvian
-coast's monumental building rested on the Humboldt fishery as much as on
-irrigated valleys; current readings give weight to both.
-
-The causal version of the river story has not held up well. Karl Wittfogel's
-hydraulic hypothesis (*Oriental Despotism*, 1957) held that large-scale
-irrigation demands central coordination and therefore produces states. Robert
-Adams's survey work in Mesopotamia found irrigation there was small-scale and
-locally managed for millennia before centralised authority appeared, and Robert
-and Eva Hunt's comparative work found no consistent relationship between
-irrigation scale and political centralisation. The usual reading now runs the
-other way: states, once they existed, took over water management.
-
-What survives is narrower and better supported. Dense agrarian populations
-concentrated where predictable water, workable alluvial soil and cheap water
-transport coincided, and those three conditions coincide most often along
-rivers. Since almost every human settlement is within reach of fresh water, the
-useful version of the claim is the specific one — annual flooding, alluvium,
-transport — which is exactly what excludes the Aegean, the Maya lowlands and
-Aksum.
-
-Rivers also worked against the cities on them. Soil salinization contributed to
-the abandonment of southern Mesopotamian farmland; the Ghaggar–Hakra dried and
-its cities emptied; Hastinapura is remembered in the *Mahabharata* as a capital
-lost when the river moved course. All three are on the map.
 
 ## Limitations
 
@@ -222,8 +190,8 @@ lost when the river moved course. All three are on the map.
 - **Coverage follows scholarship and language.** Sub-Saharan Africa (3 sites),
   Southeast Asia (5) and Central Asia (4) are thin because of excavation history
   and English-language sources, not because less happened there.
-- **Some entries are landscapes rather than cities** — Llanos de Moxos,
-  Kuhikugu, San Agustín, Newark Earthworks — hence "cities and cultures".
+- **Some entries are landscapes rather than cities** These include Llanos de Moxos,
+  Kuhikugu, San Agustín, Newark Earthworks.
 - **Population figures are estimates**, marked `est.`, with contested ones
   labelled. Dates are the span the map shows, not claims about precise founding
   years.

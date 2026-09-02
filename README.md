@@ -1,14 +1,18 @@
 # Rivers and Civilizations
 
 An interactive world map of the ancient world's major rivers and the
-civilizations that grew up along them — 40 river systems and 85 cities and
+cities and towns that grew up along them — 40 river systems and 85 cities and
 cultures, from the Supe valley in Peru to the Yellow River bend, spanning
 10,000 BCE to 1600 CE.
 
-The claim is the modest one: most early civilizations grew where a river slowed
-and dropped its silt. Not all of them did, and [SCOPE.md](SCOPE.md) sets out the
-inclusion criterion, the notable exclusions, and how far the pattern actually
-holds.
+Four river systems will catch the eye: The Tigris & Euphrates, the Yantze & Yellow,
+the Indus, and the Nile, which were central to the ancient Mesopotamian, Chinese, Indian, 
+and Egyptian civilizations. (The ancient civilizations of the Americas didn't have such central rivers.) 
+However, this map is intentionally not limited to those societies, 
+nor is it trying to make any grand claims about the origin of civilization. 
+
+[SCOPE.md](SCOPE.md) sets out the inclusion criterion for cities on this map, 
+as well as the notable exclusions.
 
 **Live map: https://USERNAME.github.io/REPO/**
 
@@ -52,7 +56,7 @@ Inside `index.html`, the data sits in labelled blocks near the bottom, above the
 code:
 
 ```html
-<script data-block="SITES">    the 85 ancient cities and cultures
+<script data-block="SITES">    the 85 ancient cities and archeological sites
 <script data-block="RIVERS">   the 40 river systems
 <script data-block="MODERN">   modern cities on the same rivers
 <script data-block="IMG">      manual image overrides

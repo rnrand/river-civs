@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%2307161a'/%3E%3Cpath d='M10.5 1.5c.5 5.5 5 6 5 11.5s-5.5 6-5.5 11.5v6' fill='none' stroke='%236fe0dc' stroke-opacity='.22' stroke-width='5.5' stroke-linecap='round'/%3E%3Cpath d='M10.5 1.5c.5 5.5 5 6 5 11.5s-5.5 6-5.5 11.5v6' fill='none' stroke='%236fe0dc' stroke-width='2.6' stroke-linecap='round'/%3E%3Ccircle cx='22.5' cy='12.5' r='3.5' fill='%23e0a33c'/%3E%3C/svg%3E">
 <meta name="theme-color" content="#07161a">
-<title>Rivers and Civilizations — an atlas of the ancient world</title>
+<title>Rivers and Cities of the Ancient World</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -248,7 +248,7 @@ svg{display:block;width:100%;height:100%}
 </head>
 <body>
 <div id="stage">
-  <svg id="map" aria-label="World map of ancient river systems and the civilizations along them">
+  <svg id="map" aria-label="World map of ancient river systems and the towns and cities that emerged along them">
     <g id="scene">
       <g id="grat"></g>
       <g id="lands"></g>
@@ -266,7 +266,7 @@ svg{display:block;width:100%;height:100%}
 
 <header class="mast">
   <p class="eyebrow">Water &amp; settlement</p>
-  <h1><span class="w">Rivers</span> and <span class="c">Civilizations</span></h1>
+  <h1><span class="w">Rivers</span> and <span class="c">Cities</span></h1>
   <p class="tally" id="tally"></p>
 </header>
 
@@ -1167,9 +1167,9 @@ const pBody=$('#pBody'),pKick=$('#pKicker'),sheetLabel=$('#sheetLabel');
 const REGS=['Africa','West Asia','Central Asia','South Asia','East Asia','Southeast Asia',
             'Europe','North America','Mesoamerica','South America'];
 function renderList(){
-  pKick.textContent=Object.keys(CRADLE).length+' cradles';
-  sheetLabel.textContent='The cradles';
-  let h='<p class="intro">Most early civilizations grew up where a river slowed and dropped its silt \u2014 though the Maya, the Greeks and the Phoenicians managed otherwise. Pick a river to follow it, or a city to read it.</p>';
+  pKick.textContent=Object.keys(CRADLE).length+' river systems';
+  sheetLabel.textContent='The river systems';
+  let h='<p class="intro">Many early cities and towns emerged where a river slowed and dropped its silt. Pick a river to follow it, or a city to read it.</p>';
   REGS.forEach(r=>{
     const ks=Object.keys(CRADLE).filter(k=>CRADLE[k].reg===r);
     if(!ks.length)return;
@@ -1270,7 +1270,7 @@ say('info', '%cRivers and Civilizations', 'font-weight:bold',
   '\u2014 to change a photograph, edit the IMG data block in this file. Run imageAudit() to list sites with no image.');
 
 /* ============ boot ============ */
-$('#tally').innerHTML=Object.keys(CRADLE).length+' river systems &middot; '+SITE.length+' cities and cultures<br>10,000 BCE &ndash; 1600 CE';
+$('#tally').innerHTML=Object.keys(CRADLE).length+' river systems &middot; '+SITE.length+' settlements<br>10,000 BCE &ndash; 1600 CE';
 renderList();
 if(innerWidth<=900)$('#panel').classList.add('open');
 pBody.addEventListener('pointerleave',()=>{if(!cur)lightSys(null)});
