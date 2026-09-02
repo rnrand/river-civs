@@ -26,7 +26,7 @@ are set out below, with candidates, in case the map is ever extended. Modern
 cities appear only as an optional overlay, to show which of these rivers are
 still inhabited.
 
-## Included sites (85 across 40 river systems)
+## Included sites (84 across 42 river systems)
 
 ### Africa
 **The Nile** — Memphis (3100 BCE–600 CE), Kerma (2500–1450 BCE), Thebes
@@ -45,12 +45,12 @@ Nippur (5000–800 BCE), Uruk (4000 BCE–300 CE), Ur (3800–500 BCE), Girsu
 **Pulvar & Kor** — Persepolis (518–330 BCE).
 
 ### Central Asia
-**The Oxus** — Gonur Tepe (2400–1600 BCE), Dashly Oasis (2200–1700 BCE).
+**The Oxus & Murghab** — Gonur Tepe (2400–1600 BCE), Dashly Oasis (2200–1700 BCE).
 **The Helmand** — Mundigak (4000–2200 BCE), Shahr-e Sukhteh (3200–1800 BCE).
 
 ### South Asia
-**The Indus** — Mehrgarh (7000–2600 BCE), Harappa (3300–1700 BCE), Dholavira
-(2900–1450 BCE), Mohenjo-daro (2600–1900 BCE), Lothal (2400–1900 BCE).
+**The Indus** — Mehrgarh (7000–2600 BCE), Harappa (3300–1700 BCE), Mohenjo-daro (2600–1900 BCE).
+**Sabarmati & Bhogavo** — Lothal (2400–1900 BCE).
 **Ghaggar–Hakra** — Rakhigarhi (4600–1900 BCE), Kalibangan (3500–1750 BCE),
 Ganweriwala (2600–1900 BCE). The channel is now dry and is drawn broken.
 **Ganges & Yamuna** — Varanasi (1200 BCE–1600 CE), Hastinapura (1200–300 BCE),
@@ -60,8 +60,9 @@ Pataliputra (490 BCE–550 CE).
 ### East Asia
 **The Yellow River** — Banpo (4800–3700 BCE), Taosi (2300–1900 BCE), Erlitou
 (1900–1500 BCE), Anyang (1300–1046 BCE), Xianyang & Haojing (1046–206 BCE).
-**The Yangtze** — Hemudu (5000–3300 BCE), Liangzhu (3300–2300 BCE), Shijiahe
-(2500–2000 BCE), Sanxingdui (1700–1000 BCE).
+**The Yangtze** — Liangzhu (3300–2300 BCE), Shijiahe (2500–2000 BCE), Sanxingdui
+(1700–1000 BCE).
+**The Yao** — Hemudu (5000–3300 BCE).
 
 ### Southeast Asia
 **The Red River** — Cổ Loa (700 BCE–100 CE).
@@ -93,8 +94,7 @@ Pataliputra (490 BCE–550 CE).
 **Río Grande de Nasca** — Cahuachi (100 BCE–500 CE).
 **Moche & Chicama** — Huacas de Moche (100–800 CE), Chan Chan (900–1470 CE).
 **Rímac & Lurín** — Pachacamac (200–1533 CE).
-**Titicaca & the Desaguadero** — Pukara (500 BCE–300 CE), Tiwanaku
-(100 BCE–1000 CE).
+**Ramis & Desaguadero** — Pukara (500 BCE–300 CE), Tiwanaku (100 BCE–1000 CE).
 **The Urubamba** — Cusco (1200–1533 CE), Machu Picchu (1450–1540 CE).
 **The Amazon** — Marajó (400–1300 CE), Kuhikugu (900–1600 CE), Santarém
 (1000–1600 CE).
@@ -103,20 +103,21 @@ Pataliputra (490 BCE–550 CE).
 
 ## Sites filed loosely
 
-Some entries meet the criteria as cities and towns while sitting well away from the
-channel they are filed under. The validator reports any site more than 150 km
-from its river's geometry, so these surface on every run.
+Every site is drawn within 150 km of its river's mapped course, and the
+validator fails any entry beyond 500 km, so gross misfilings cannot survive a
+build. Two entries still qualify on a stretch of the criteria rather than on
+their water alone:
 
-| Site | Filed under | Distance | Actual water |
-|---|---|---:|---|
-| Lothal | Indus | 458 km | Sabarmati drainage, Gulf of Khambhat — an Indus civilization port on another river system |
-| Marajó | Amazon | 311 km | An island the size of Switzerland at the river's mouth; the mounds are not on the mapped channel |
-| Hemudu | Yangtze | 254 km | Coastal wetland on Hangzhou Bay, not the Yangtze proper |
-| Dholavira | Indus | 221 km | Two seasonal streams in the Rann of Kachchh, dammed into sixteen reservoirs |
-| Pukara | Titicaca | 215 km | The lake's northern shore, not the Desaguadero outlet |
-| Angkor | Mekong | 215 km | Tonlé Sap and the Siem Reap river, within the Mekong basin |
-| Persepolis | Pulvar & Kor | — | On the Pulvar, but the empire ran on qanats and roads rather than floodplain farming |
-| Çatalhöyük | Çarşamba | — | A marshy alluvial fan in a closed basin, not a river bank |
+| Site | Filed under | Why it is a stretch |
+|---|---|---|
+| Persepolis | Pulvar & Kor | It stands on the Pulvar, but Achaemenid agriculture ran on qanats and the empire on roads, not on floodplain farming |
+| Çatalhöyük | The Çarşamba | A marshy alluvial fan in a closed basin rather than a river bank; the water was seasonal and spread, not channelled |
+
+Several sites sit on a minor tributary rather than the trunk river they are
+filed under, which is normal for a basin: Newark Earthworks on the Licking
+(109 km from the Ohio), Anyang on the Huan (104 km from the Yellow River),
+Rakhigarhi on the Ghaggar's dry channel (98 km), Bacatá on the Bogotá (93 km).
+The median site is 11 km from its drawn river.
 
 ## Lake and inland-sea settlements
 
@@ -157,14 +158,14 @@ river, and would be better as a separate layer than mixed into the river set.
 
 ## Other water strategies
 
-Neither river, lake nor sea. Worth a layer of their own, since several are among
-the most sophisticated water engineering anywhere.
+Neither river, lake nor sea. Several employed some of the most sophisticated water engineering anywhere.
 
 | Settlement | Strategy | Dates |
 |---|---|---|
 | Chichén Itzá | Cenotes — natural sinkholes into the karst water table | 600–1200 CE |
 | Tikal, Calakmul, Caracol | Plastered reservoirs and *aguadas* catching the wet season | 400 BCE–900 CE |
 | Anuradhapura, Sigiriya | Enormous artificial tanks and canals | 400 BCE–1000 CE |
+| Dholavira | Two seasonal streams, the Mansar and Manhar, dammed into sixteen stone reservoirs on an island in a salt desert | 2900–1450 BCE |
 | Marib (Saba) | A dam across the Wadi Dhana, irrigating 9,000 hectares | 800 BCE–570 CE |
 | Petra | Cisterns, dams and channels capturing flash floods | 300 BCE–100 CE |
 | Turpan | *Karez* — underground channels tapping mountain groundwater | 100 BCE onward |
@@ -177,20 +178,25 @@ the most sophisticated water engineering anywhere.
 
 ## Limitations
 
-- **Sixteen river courses are hand-digitised and approximate**, because Natural
-  Earth does not carry them at 50m resolution: the four Peruvian coastal valley
-  groups, the Urubamba, the Tiber, the Karkheh and Karun, the Ghaggar–Hakra, the
-  Coatzacoalcos and Grijalva, the Río San Juan at Teotihuacan, the Mosna, the
-  Atoyac, the Río Grande de Nasca, the Musi, the Çarşamba, the Pulvar, the
-  Colorado San Juan and Animas, and the Bolivian Desaguadero. They are accurate
+- **Twenty river systems are hand-digitised**, because Natural Earth does not
+  carry them at 50m resolution: the four Peruvian coastal valley groups, the
+  Urubamba, the Mosna, the Río Grande de Nasca, the Tiber, the Karkheh and
+  Karun, the Pulvar, the Ghaggar–Hakra, the Sabarmati and Bhogavo, the
+  Çarşamba, the Yao, the Musi, the Coatzacoalcos and Grijalva, the Río San Juan
+  at Teotihuacan, the Atoyac, the Colorado San Juan and Animas, and the
+  Bolivian Desaguadero. Eight further reaches are hand-drawn additions to
+  Natural Earth systems: the Wei, the Salt, the Murghab, the upper Min and
+  Tiaoxi, the Bolan, the lower Amazon and Pará channels, the Tonlé Sap and Siem
+  Reap rivers, and the Ramis. All are accurate enough to show the relationship
+  between a city and its water, not to measure. They are accurate
   enough to show the relationship between a city and its water, not to measure.
 - **Coastlines are simplified** for file size and look blocky at deep zoom.
-- **Significance tiers are editorial.** 38 of 85 sites are marked capital or
+- **Significance tiers are editorial.** 38 of 84 sites are marked capital or
   metropolis, which is arguably too many.
 - **Coverage follows scholarship and language.** Sub-Saharan Africa (3 sites),
   Southeast Asia (5) and Central Asia (4) are thin because of excavation history
   and English-language sources, not because less happened there.
-- **Some entries are landscapes rather than cities** These include Llanos de Moxos,
+- **Some entries are landscapes rather than cities** — Llanos de Moxos,
   Kuhikugu, San Agustín, Newark Earthworks.
 - **Population figures are estimates**, marked `est.`, with contested ones
   labelled. Dates are the span the map shows, not claims about precise founding
