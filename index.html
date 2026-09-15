@@ -154,8 +154,10 @@ svg{display:block;width:100%;height:100%}
 .card .note{font-size:16px;line-height:1.5;color:#cfdcd8;margin:16px 0 0}
 .shot{position:relative;margin:16px 0 0;background:#0e2429;border:1px solid #1d3b40;
   height:150px;overflow:hidden}
-.shot img{display:block;width:100%;height:150px;object-fit:cover;
-  filter:saturate(.82) contrast(1.05) brightness(.9);opacity:0;transition:opacity .5s}
+.shot img{display:block;width:100%;height:100%;object-fit:cover;object-position:50% 35%;
+    filter:saturate(.82) contrast(1.05) brightness(.9);opacity:0;transition:opacity .5s}
+  /* tall images are letterboxed rather than cropped to a slice */
+.shot.tall img{object-fit:contain;object-position:50% 50%}
 .shot img.in{opacity:1}
 .shot.empty{height:auto;border-style:dashed;background:none}
 .shot.empty .cap{position:static;padding:9px 10px;background:none;line-height:1.6}
@@ -418,7 +420,7 @@ window.SITES = [
   d:'Sacrificial pits on the Chengdu plain holding bronze masks and a two-metre human figure in a style with no parallel in the north.'},
  {n:'San Lorenzo',c:'Olmec',r:'coatza',lo:-94.77,la:17.75,f:-1400,t:-1000,w:'San_Lorenzo_Tenochtitlán',g:['colossal heads','first Mesoamerican city','basalt transport'],role:'First city of Mesoamerica',ti:1,pop:'est. 10,000',
   d:'Mesoamerica\u2019s first city, on a levee above the Coatzacoalcos, where colossal basalt heads were dragged sixty kilometres from the hills.'},
- {n:'Anyang',c:'Shang dynasty',r:'huanghe',lo:114.35,la:36.1,f:-1300,t:-1046,w:'Yinxu',g:['oracle bones','royal tombs','Shang capital'],role:'Last capital of the Shang',ti:1,pop:'est. 50,000',
+ {n:'Yin',c:'Shang dynasty',r:'huanghe',lo:114.35,la:36.1,f:-1300,t:-1046,w:'Yinxu',g:['oracle bones','royal tombs','Shang capital'],role:'Last capital of the Shang',ti:1,pop:'est. 50,000',
   d:'The last Shang capital: royal tombs with chariots, ritual bronzes, and 150,000 inscribed oracle bones — the oldest Chinese writing.'},
  {n:'Chogha Zanbil',c:'Elam',r:'karun',lo:48.52,la:32.01,f:-1250,t:-640,w:'Chogha_Zanbil',g:['five-tier ziggurat','50 km canal','Elamite'],role:'Royal ziggurat city',ti:2,
   d:'A five-tiered ziggurat inside three walls, served by a canal driven fifty kilometres from the Karkheh.'},
@@ -629,7 +631,12 @@ window.MODERN = [
     // Pantheon: File:20190406-DSC5193_Panteon.jpg
     // Roman Forum: File:Foro_Romano_visto_dai_Musei_Capitolini_Roma.jpg'
     'Rome': ['File:20190406-DSC5193_Panteon.jpg', "The Pantheon"], 
-    'Poviglio': ['File:Ricostruzione_grafica_della_Terramara_di_Montale_(Modena),_disegno_di_Riccardo_Merlo.jpg', 'Terramare of Montale, reconstruction']
+    'Poviglio': ['File:Ricostruzione_grafica_della_Terramara_di_Montale_(Modena),_disegno_di_Riccardo_Merlo.jpg', 'Terramare of Montale, reconstruction'],
+    'Hemudu': ['File:Hemudu-Diorama-Aaron-Delehanty.jpg', 'Model of a Hemudu Neolithic Settlement'],
+    'Shijiahe': ['File:Characters_from_Shijiahe_Culture,_Hubei_(10185323866).jpg', 'Carved Marks of Shijiahe Culture'],
+    'Yin': ['File:Yinxu_-_殷墟_(5066593365).jpg', 'A model of the Royal Palace Complex of Yin'],
+    'Erlitou': ['File:嵌绿松石铜牌饰（81YLVM4）,_2024-06-22.jpg', 'A turquoise-inlaid bronze plaque recovered from Erlitou'],
+    'Taosi' : ['File:Painted_Pottery_Plate_with_Dragon_Design_Taosi_Culture,_Early_Period_(2,300—2,100_BCE)_Excavated_at_the_Taosi_Site,_Xiangfen_County,_Shanxi._Capital_Museum,_Beijing.jpg', 'Taosi Culture Painted Pottery Plate with Dragon Design'],
     // 'Ganweriwala': false,      // use false to show no picture at all
   };
   </script>
@@ -1022,6 +1029,22 @@ function imgURLs(thumb){
                  'https://en.wikipedia.org/w/index.php?title=Special:Redirect/file/'+m[1]+'&width=800');
   return [...new Set(urls)];
 }
+/* Wikipedia images arrive in every shape: panoramas, square coins, tall steles.
+   Give the box the image's own aspect ratio where that is reasonable, so nothing
+   is cropped; fall back to cropping only for extremes, and letterbox anything
+   taller than it is wide. */
+function fitShot(box,im){
+  const r=(im.naturalWidth||4)/(im.naturalHeight||3);
+  const w=box.clientWidth||300;
+  if(r<0.95){                                  // portrait: show it whole
+    box.style.height='260px';
+    box.classList.add('tall');
+  }else{
+    box.classList.remove('tall');
+    box.style.height=Math.round(Math.min(Math.max(w/r,110),260))+'px';
+  }
+}
+ 
 function loadFirst(urls,ok,fail){
   let i=0,j=0;
   const next=()=>{
@@ -1240,11 +1263,11 @@ function renderCard(s){
       if(w)w.ok=u;
       if(cur!==s){return}
       im.alt=s.n+' — image';im.className='';
+      fitShot(shot,im);
       shot.insertBefore(im,cap);
       requestAnimationFrame(()=>im.classList.add('in'));
       cap.textContent=ov.urls.includes(u)?(ov.cap||'Supplied image'):'Image via Wikipedia';
-    },()=>{
-      if(cur!==s)return;
+    },()=>{      if(cur!==s)return;
       shot.classList.add('empty');
       cap.innerHTML='Image did not load &mdash; <a href="'+url+'" target="_blank" rel="noopener">see the article</a>. '
         +'Supply your own in the IMG map.';
