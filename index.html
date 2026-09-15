@@ -155,8 +155,8 @@ svg{display:block;width:100%;height:100%}
 .shot{position:relative;margin:16px 0 0;background:#0e2429;border:1px solid #1d3b40;
   height:150px;overflow:hidden}
 .shot img{display:block;width:100%;height:100%;object-fit:cover;object-position:50% 35%;
-    filter:saturate(.82) contrast(1.05) brightness(.9);opacity:0;transition:opacity .5s}
-  /* tall images are letterboxed rather than cropped to a slice */
+  filter:saturate(.82) contrast(1.05) brightness(.9);opacity:0;transition:opacity .5s}
+/* tall images are letterboxed rather than cropped to a slice */
 .shot.tall img{object-fit:contain;object-position:50% 50%}
 .shot img.in{opacity:1}
 .shot.empty{height:auto;border-style:dashed;background:none}
@@ -165,24 +165,31 @@ svg{display:block;width:100%;height:100%}
 .card .role{font-family:var(--mono);font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;
   color:var(--madder);margin:9px 0 0;line-height:1.5}
 .card .culture{margin-top:6px}
+.shot .cap.prose{font-family:var(--serif);font-style:italic;font-size:12.5px;
+  letter-spacing:0;text-transform:none;line-height:1.35;color:#d8e3df;
+  padding:22px 11px 9px;display:-webkit-box;-webkit-line-clamp:2;
+  -webkit-box-orient:vertical;overflow:hidden}
 .shot .cap{position:absolute;left:0;right:0;bottom:0;padding:16px 10px 6px;
   font-family:var(--mono);font-size:8.5px;letter-spacing:.11em;text-transform:uppercase;
   color:#b9cbc7;background:linear-gradient(to top,rgba(6,18,21,.92),transparent)}
+.credit{font-family:var(--mono);font-size:8.5px;letter-spacing:.1em;color:#6f8b88;
+  margin:6px 0 0;line-height:1.5}
 .desc{font-size:14.5px;line-height:1.4;color:#9fb5b1;font-style:italic;margin:10px 0 0}
-.wlink{display:inline-block;font-family:var(--mono);font-size:9.5px;letter-spacing:.14em;
-  text-transform:uppercase;color:var(--water);text-decoration:none;margin:16px 0 0;
-  border-bottom:1px solid #2a4d52;padding-bottom:3px}
-.wlink:hover{color:var(--water-hi);border-color:var(--water)}
-.tagrow{display:flex;flex-wrap:wrap;gap:6px;margin:12px 0 0}
-.tag{font-family:var(--mono);font-size:9.5px;letter-spacing:.05em;color:#9fb5b1;
-  border:1px solid #24464b;border-radius:2px;padding:4px 7px}
-.chips{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0 0}
-.chip{font-family:var(--mono);font-size:10px;letter-spacing:.05em;color:#d7e2df;
-  border:1px solid #29494e;border-radius:2px;padding:4px 8px}
-.chip:hover{border-color:var(--clay);color:var(--clay)}
-.back{font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;
-  color:var(--fog);margin:22px 0 0;display:block}
-.back:hover{color:var(--bone)}
+  .wlink{display:inline-block;font-family:var(--mono);font-size:9.5px;letter-spacing:.14em;
+    text-transform:uppercase;color:var(--water);text-decoration:none;margin:16px 0 0;
+    border-bottom:1px solid #2a4d52;padding-bottom:3px}
+  .wlink:hover{color:var(--water-hi);border-color:var(--water)}
+  .tagrow{display:flex;flex-wrap:wrap;gap:6px;margin:12px 0 0}
+  .tag{font-family:var(--mono);font-size:9.5px;letter-spacing:.05em;color:#9fb5b1;
+    border:1px solid #24464b;border-radius:2px;padding:4px 7px}
+  .chips{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0 0}
+  .chip{font-family:var(--mono);font-size:10px;letter-spacing:.05em;color:#d7e2df;
+    border:1px solid #29494e;border-radius:2px;padding:4px 8px}
+  .chip:hover{border-color:var(--clay);color:var(--clay)}
+  .back{font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;
+    color:var(--fog);margin:22px 0 0;display:block}
+  .back:hover{color:var(--bone)}
+
 
 /* ---------- timeline ---------- */
 .tl{position:fixed;bottom:0;left:0;right:352px;z-index:5;padding:0 26px 20px;
@@ -1063,22 +1070,67 @@ function loadFirst(urls,ok,fail){
   };
   next();
 }
+/* File name out of any of the image URL shapes we might have loaded. */
+function fileFromURL(u){
+  try{
+    const t=decodeURIComponent(String(u).split('?')[0]);
+    let m=t.match(/Special:(?:Redirect\/file|FilePath)\/(.+)$/);
+    if(!m)m=t.match(/\/thumb\/[^/]+\/[^/]+\/([^/]+)\//);
+    if(!m)m=t.match(/\/([^/]+\.(?:jpe?g|png|svg|gif|webp|tiff?))$/i);
+    return m?m[1].replace(/ /g,'_'):'';
+  }catch(e){return ''}
+}
+
+/* Commons keeps a description, author and licence on each file page. Reached
+   through the same API en.wikipedia serves, which allows anonymous CORS. */
+const FC={};
+function cleanDesc(html){
+  let t='';
+  try{
+    const doc=new DOMParser().parseFromString('<div>'+(html||'')+'</div>','text/html');
+    const en=doc.querySelector('[lang=en],[lang^="en-"]');
+    t=((en||doc.body).textContent||'').replace(/\s+/g,' ').trim();
+  }catch(e){t=String(html||'').replace(/<[^>]+>/g,' ').replace(/\s+/g,' ').trim()}
+  t=t.replace(/^English:\s*/i,'');
+  if(t.length>190)t=t.slice(0,190).replace(/[\s,;:.]+\S*$/,'')+'\u2026';
+  return t;
+}
+
+function fileMeta(file){
+  if(!file)return Promise.resolve(null);
+  if(file in FC)return Promise.resolve(FC[file]);
+  const url='https://en.wikipedia.org/w/api.php?action=query&format=json&origin=*'
+    +'&prop=imageinfo&iiprop=extmetadata'
+    +'&iiextmetadatafilter=ImageDescription|LicenseShortName|Artist'
+    +'&titles='+encodeURIComponent('File:'+file);
+  return fetch(url).then(r=>r.ok?r.json():null).then(j=>{
+    const page=j&&j.query&&Object.values(j.query.pages)[0];
+    const md=page&&page.imageinfo&&page.imageinfo[0]&&page.imageinfo[0].extmetadata;
+    const val=k=>(md&&md[k]&&md[k].value)||'';
+    const o=md?{desc:cleanDesc(val('ImageDescription')),
+                artist:cleanDesc(val('Artist')).replace(/\u2026$/,''),
+                lic:cleanDesc(val('LicenseShortName'))}:null;
+    FC[file]=o;return o;
+  }).catch(()=>{FC[file]=null;return null});
+}
+
 function wiki(slug){
   if(slug in WC)return Promise.resolve(WC[slug]);
   const API='https://en.wikipedia.org/api/rest_v1/page/', q=encodeURIComponent(slug);
-  return fetch(API+'summary/'+q+'?redirect=true')
-    .then(r=>r.ok?r.json():null)
-    .then(j=>{
-      const o={thumb:(j&&j.thumbnail&&j.thumbnail.source)||null,desc:(j&&j.description)||null,
-               file:null,ok:null};
-      if(o.thumb){WC[slug]=o;return o}
-      return fetch(API+'media-list/'+q)
-        .then(r=>r.ok?r.json():null)
-        .then(m=>{const it=((m&&m.items)||[]).find(x=>x.type==='image'&&x.showInGallery);
-          if(it)o.file=it.title;WC[slug]=o;return o})
-        .catch(()=>{WC[slug]=o;return o});
-    })
-    .catch(()=>{WC[slug]=null;return null});
+  const summary=fetch(API+'summary/'+q+'?redirect=true').then(r=>r.ok?r.json():null).catch(()=>null);
+  /* media-list carries the caption the article itself prints under each image */
+  const media=fetch(API+'media-list/'+q).then(r=>r.ok?r.json():null).catch(()=>null);
+  return Promise.all([summary,media]).then(([j,m])=>{
+    const o={thumb:(j&&j.thumbnail&&j.thumbnail.source)||null,desc:(j&&j.description)||null,
+             file:null,caps:{},ok:null};
+    for(const it of ((m&&m.items)||[])){
+      if(it.type!=='image')continue;
+      const f=String(it.title||'').replace(/^File:/,'').replace(/ /g,'_');
+      if(it.caption&&it.caption.text)o.caps[f]=it.caption.text.trim();
+      if(!o.file&&it.showInGallery)o.file='File:'+f;
+    }
+    WC[slug]=o;return o;
+  }).catch(()=>{WC[slug]=null;return null});
 }
 function siteTipHTML(s){
   const w=WC[s.w],ov=override(s.n),
@@ -1228,7 +1280,7 @@ function renderCard(s){
   sheetLabel.textContent=s.n;
   pKick.textContent=c.reg;
   pBody.innerHTML=`<div class="card">
-    <p class="kicker">On the ${c.hy.replace(/^The /i,'')}</p>
+    <p class="kicker">On the ${c.n.replace(/^The /,'')}</p>
     <h2>${s.n}</h2>
     <p class="role">${s.role}</p>
     <p class="culture">${s.c}</p>
@@ -1244,7 +1296,7 @@ function renderCard(s){
     <div class="tagrow">${s.g.map(t=>`<span class="tag">${t}</span>`).join('')}</div>
     <a class="wlink" href="${url}" target="_blank" rel="noopener">Read on Wikipedia &rarr;</a>
     ${sib.length?`<p class="reg">Also on this water</p><div class="chips">${sib.map(o=>`<button class="chip" data-n="${o.n}">${o.n}</button>`).join('')}</div>`:''}
-    <button class="back" id="backBtn">&larr; All Rivers</button></div>`;
+    <button class="back" id="backBtn">&larr; All cradles</button></div>`;
   pBody.scrollTop=0;
   const shot=$('#shot'),cap=$('#cap'),ov=override(s.n);
   if(ov.off)shot.remove();
@@ -1266,8 +1318,28 @@ function renderCard(s){
       fitShot(shot,im);
       shot.insertBefore(im,cap);
       requestAnimationFrame(()=>im.classList.add('in'));
-      cap.textContent=ov.urls.includes(u)?(ov.cap||'Supplied image'):'Image via Wikipedia';
-    },()=>{      if(cur!==s)return;
+      const caps=(w&&w.caps)||{}, file=fileFromURL(u);
+      const text=(ov.urls.includes(u)&&ov.cap)||caps[file]||'';
+      if(text){cap.textContent=text;cap.classList.add('prose')}
+      else cap.textContent='';          // drop the "loading" placeholder
+      /* no caption in the article: ask the Commons file page, and credit it */
+      fileMeta(file).then(m=>{
+        if(cur!==s)return;
+        if(!text){
+          if(m&&m.desc){cap.textContent=m.desc;cap.classList.add('prose')}
+          else cap.remove();
+        }
+        if(!m)return;
+        const credit=[m.artist,m.lic].filter(Boolean).join(' \u00b7 ');
+        if(credit){
+          const el=document.createElement('p');
+          el.className='credit';el.textContent=credit;
+          shot.insertAdjacentElement('afterend',el);
+        }
+      });
+      if(!text)setTimeout(()=>{if(cur===s&&!cap.textContent.trim())cap.remove()},4000);
+    },()=>{
+      if(cur!==s)return;
       shot.classList.add('empty');
       cap.innerHTML='Image did not load &mdash; <a href="'+url+'" target="_blank" rel="noopener">see the article</a>. '
         +'Supply your own in the IMG map.';
