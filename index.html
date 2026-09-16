@@ -1419,17 +1419,20 @@ function pickWidth(px){
   const want=Math.round(px*(window.devicePixelRatio||1));
   return WIDTHS.find(w=>w>=want)||WIDTHS[WIDTHS.length-1];
 }
-/* Firefox's OpaqueResponseBlocking rejects cross-origin no-cors responses in
-   some contexts, which kills a plain <img> pointed at the image CDN. Loading
-   those URLs as CORS requests sidesteps it — upload.wikimedia.org sends
-   Access-Control-Allow-Origin: *. Only that host is treated this way; an
-   arbitrary URL you supply might not send the header, and requesting CORS
-   where it is unavailable would break a load that would otherwise work. */
+/* A CDN thumbnail is tried twice: once as an ordinary image load, and if that
+   fails, once as a CORS load. Firefox's OpaqueResponseBlocking rejects some
+   cross-origin no-cors responses, which a CORS request avoids; but if the host
+   does not send Access-Control-Allow-Origin then the CORS attempt is the one
+   that fails. Neither can be assumed, so both are attempted before falling
+   back to the redirect. */
 const CDN='https://upload.wikimedia.org/';
-/* If the CDN keeps failing anyway, stop putting it first. One wasted request
-   per session rather than one per image. */
+/* Set to false to skip the CDN entirely and always use the (slower, but
+   universally reliable) Special:FilePath redirect. */
+const USE_CDN=true;
+/* If the CDN keeps failing anyway, stop putting it first: one wasted pair of
+   requests per session rather than per image. */
 let cdnFails=0;
-const cdnWorth=()=>cdnFails<2;
+const cdnWorth=()=>USE_CDN&&cdnFails<2;
 function commonsURLs(f,width){
   const n=fileName(f), e=encFile(n), w=width||640;
   const urls=[];
@@ -1497,11 +1500,12 @@ function setCredit(capt,shot,t){
 }
 /* A src that has actually loaded, per site. The candidate list is a chain of
    fallbacks and the last resort is a blob, so the URL that works is not
-   knowable in advance — the tooltip reuses whatever did. */
-const IMGSRC={},CARDSRC={};
+   knowable in advance. Hover and card ask for the same size, so whichever
+   resolves first serves both. */
+const IMGSRC={};
 function showImage(s,shot,cap,capt,ov,urls,url){
   loadFirst(urls,(im,u)=>{
-    CARDSRC[s.n]=im.currentSrc||im.src;
+    IMGSRC[s.n]=im.currentSrc||im.src;
     if(cur!==s)return;
     im.alt=s.n+' \u2014 image';im.className='';
     fitShot(shot,im);
@@ -1548,13 +1552,17 @@ async function fillCaption(s,shot,capt,ov,u){
 }
 
 function loadFirst(urls,ok,fail){
-  let i=0,j=0;
+  let i=0,j=0,cors=false;
   const next=()=>{
     if(i>=urls.length)return viaBlob();
-    const u=urls[i++],im=new Image();
-    if(u.startsWith(CDN))im.crossOrigin='anonymous';    // avoids ORB
-    im.onload=()=>{if(u.startsWith(CDN))cdnFails=0;ok(im,u)};
-    im.onerror=()=>{if(u.startsWith(CDN))cdnFails++;next()};
+    const u=urls[i], cdn=u.startsWith(CDN), im=new Image();
+    if(cdn&&cors)im.crossOrigin='anonymous';
+    im.onload=()=>{if(cdn)cdnFails=0;ok(im,u)};
+    im.onerror=()=>{
+      if(cdn&&!cors){cors=true;next();return}           // same URL, as CORS
+      if(cdn)cdnFails++;
+      cors=false;i++;next();
+    };
     im.src=u;
   };
   /* if <img> is blocked outright, try fetching the bytes and rendering a blob */
@@ -1668,11 +1676,13 @@ function captions(slug){
     }).catch(()=>o);
   });
 }
+/* The hover strip is about 276px wide and the card box about 307px, which land
+   on the same cached width at any pixel ratio — so both use the card's list and
+   share one download. */
 function tipURLs(s){
   const ov=override(s.n);
   if(ov.off)return [];
-  if(ov.direct)return ov.urls;
-  if(ov.file)return commonsURLs(ov.file,320);
+  if(ov.file||ov.direct)return cardURLs(ov,$('#shot')||{clientWidth:300});
   const w=WC[s.w];
   return w&&w.thumb?imgURLs(w.thumb):[];
 }
@@ -1690,7 +1700,7 @@ function warmTip(s){
 }
 function siteTipHTML(s){
   const ov=override(s.n);
-  const src=ov.off?null:(IMGSRC[s.n]||CARDSRC[s.n]||null);
+  const src=ov.off?null:(IMGSRC[s.n]||null);
   return (src?`<img src="${src}" alt="">`:'')
     +`<b>${s.n}</b><span class="tr">${s.role}</span><i>${s.c}</i>`
     +`<em>${span(s)}</em>`
@@ -1861,8 +1871,10 @@ function renderCard(s){
   if(ov.off){shot.remove();capt.remove()}
   else if(ov.urls.length){
     /* The IMG map already names the file, so the image can start loading now
-       rather than after the Wikipedia lookups come back. */
-    showImage(s,shot,cap,capt,ov,cardURLs(ov,shot),url);
+       rather than after the Wikipedia lookups come back. If hovering already
+       resolved it, go straight to the URL that worked. */
+    showImage(s,shot,cap,capt,ov,
+      IMGSRC[s.n]?[IMGSRC[s.n]]:cardURLs(ov,shot),url);
   }
   wiki(s.w).then(w=>{
     if(cur!==s)return;
@@ -1891,6 +1903,34 @@ function renderCard(s){
 $('#sheetTab').addEventListener('click',()=>$('#panel').classList.toggle('open'));
 
 /* ============ author tools ============ */
+/* imgProbe('Nineveh') — reports how each candidate URL for a site behaves, so
+   an environment that blocks one route can be identified from the console. */
+window.imgProbe=function(name){
+  const s=SITE.find(x=>x.n===name);
+  if(!s)return 'no such site';
+  const test=(u,c)=>new Promise(r=>{
+    const im=new Image();
+    if(c)im.crossOrigin='anonymous';
+    const t=setTimeout(()=>r('timeout'),8000);
+    im.onload=()=>{clearTimeout(t);r('ok '+im.naturalWidth+'px')};
+    im.onerror=()=>{clearTimeout(t);r('failed')};
+    im.src=u+(u.includes('?')?'&':'?')+'probe='+Date.now();
+  });
+  const urls=cardURLs(override(name),$('#shot')||{clientWidth:300});
+  return (async()=>{
+    const rows=[];
+    for(const u of urls){
+      rows.push({url:u.slice(0,72),plain:await test(u,false),
+                 cors:u.startsWith(CDN)?await test(u,true):'n/a'});
+    }
+    say('table',rows);
+    say('info','cdnFails='+cdnFails+'  USE_CDN='+USE_CDN
+      +'  devicePixelRatio='+(window.devicePixelRatio||1)
+      +'  resolved src='+(IMGSRC[name]||'none'));
+    return rows;
+  })();
+};
+
 window.imageAudit=async function(){
   const rows=[];
   for(const s of SITE){
