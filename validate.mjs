@@ -28,7 +28,9 @@ for (const [, name, src] of blocks) {
     process.exit(1);
   }
 }
-const { GEO, CRADLES, SITES, MODERN, IMG } = win;
+/* The rivers block has been called RIVERS and CRADLES at different times. */
+const { GEO, SITES, MODERN, IMG } = win;
+const CRADLES = win.RIVERS || win.CRADLES;
 
 const errors = [];
 const warnings = [];
@@ -127,9 +129,12 @@ for (const m of MODERN) {
 for (const [name, v] of Object.entries(IMG)) {
   if (!seen.has(name))
     bad(`image override "${name}" matches no site name in the SITES block`);
-  const val = Array.isArray(v) ? v[0] : v;
+  const val = Array.isArray(v) ? v[0] : (v && typeof v === 'object' ? (v.file || v.url) : v);
   if (v !== false && !(typeof val === 'string' && val.length))
-    bad(`image override "${name}": expected a URL, a 'File:…' name, an [url, caption] pair, or false`);
+    bad(`image override "${name}": expected a 'File:…' name or URL, optionally as ` +
+        `[file, caption, credit] or {file, caption, credit}, or false`);
+  if (Array.isArray(v) && v.length > 3)
+    warn(`image override "${name}": more than three array entries; extras are ignored`);
 }
 
 /* ---------- optional: do the Wikipedia slugs resolve? ---------- */
