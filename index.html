@@ -1412,11 +1412,21 @@ const fileName=f=>String(f).replace(/^\s*(File|Image)\s*:\s*/i,'').replace(/ /g,
 /* MediaWiki percent-encodes a few characters encodeURIComponent leaves alone;
    matching it exactly keeps us on the CDN's cached path. */
 const encFile=f=>encodeURIComponent(f).replace(/[()']/g,c=>'%'+c.charCodeAt(0).toString(16).toUpperCase());
-/* Widths Wikimedia already has cached. Asking for an arbitrary size makes the
-   thumbnailer work, which is the slow path. */
-const WIDTHS=[320,480,640,800,1024,1280];
+/* Wikimedia only generates thumbnails at these widths; anything else is
+   refused with a 400 (which Firefox reports as OpaqueResponseBlocking, since a
+   400 body is not an image). Verified against the API: asking for 320, 480,
+   640, 800 or 1024 returns 330, 500, 960, 960 and 1280 respectively. */
+const WIDTHS=[250,330,500,960,1280,1920];
+/* Density is capped below the display's: a 307px box at ratio 2 wants 614px,
+   and the next width Wikimedia offers above that is 960 — nearly three times
+   the bytes for a difference few would notice. 500 is the better trade. */
+const MAX_DENSITY=1.6;
+/* 960 is a big jump from 500. Where the choice is between the two, prefer 500
+   unless the box genuinely needs more than 640 device pixels. */
+const WIDTH_CEILING=640;
 function pickWidth(px){
-  const want=Math.round(px*(window.devicePixelRatio||1));
+  let want=Math.round(px*Math.min(window.devicePixelRatio||1,MAX_DENSITY));
+  if(want>500&&want<=WIDTH_CEILING)want=500;
   return WIDTHS.find(w=>w>=want)||WIDTHS[WIDTHS.length-1];
 }
 /* A CDN thumbnail is tried twice: once as an ordinary image load, and if that
