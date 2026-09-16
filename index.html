@@ -165,13 +165,11 @@ svg{display:block;width:100%;height:100%}
 .card .role{font-family:var(--mono);font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;
   color:var(--madder);margin:9px 0 0;line-height:1.5}
 .card .culture{margin-top:6px}
-.shot .cap.prose{font-family:var(--serif);font-style:italic;font-size:12.5px;
-  letter-spacing:0;text-transform:none;line-height:1.35;color:#d8e3df;
-  padding:22px 11px 9px;display:-webkit-box;-webkit-line-clamp:2;
-  -webkit-box-orient:vertical;overflow:hidden}
 .shot .cap{position:absolute;left:0;right:0;bottom:0;padding:16px 10px 6px;
   font-family:var(--mono);font-size:8.5px;letter-spacing:.11em;text-transform:uppercase;
   color:#b9cbc7;background:linear-gradient(to top,rgba(6,18,21,.92),transparent)}
+.capt{font-family:var(--serif);font-style:italic;font-size:13px;line-height:1.4;
+  color:#c6d6d2;margin:9px 0 0}
 .credit{font-family:var(--mono);font-size:8.5px;letter-spacing:.1em;color:#6f8b88;
   margin:6px 0 0;line-height:1.5}
 .desc{font-size:14.5px;line-height:1.4;color:#9fb5b1;font-style:italic;margin:10px 0 0}
@@ -606,46 +604,410 @@ window.MODERN = [
 
 <!-- ===================== DATA: IMG ===================== -->
 <script data-block="IMG">
-/* MANUAL IMAGE OVERRIDES  —  edit this map to change any picture.
+/* IMAGES  —  every site has an entry here; edit any of them.
+
+   The map reads this map only: file, caption and credit are all explicit, so
+   nothing is fetched for them at runtime. The entries are split into two
+   sections — ADDED BY HAND, chosen deliberately, and ADDED AUTOMATICALLY,
+   filled in from Wikipedia and Commons and worth replacing when you spot a
+   weak one. Moving an entry between sections is purely cosmetic.
 
    Key   = the site name exactly as it appears on the map ('Babylon').
    Value = one of:
-     'https://…/photo.jpg'          any direct image URL
-     'File:Ishtar Gate.jpg'         any Wikimedia Commons file name
-     ['File:Ishtar Gate.jpg','Reconstructed Ishtar Gate, Berlin']
-                                    file (or URL) plus your own caption
+     ['File:X.jpg','Caption','Author · Licence']
+                                    the form used throughout this map
+     ['File:X.jpg','Caption']       caption yours, credit looked up
+     'File:X.jpg'                   both looked up
+     'https://…/photo.jpg'          any direct image URL. Nothing can be
+                                    looked up for these, so give your own
+                                    caption and credit
+     {file:'File:X.jpg', caption:'…', credit:''}
+                                    same thing, named. An empty credit
+                                    suppresses the credit line
      false                          show no picture at all for this site
 
-   An override is tried first; if it fails to load, the automatic
-   Wikipedia image is used as a backup. Run imageAudit() in the browser
-   console to list every site that has no Wikipedia image.
+   Leave a caption empty ('') to fall back to the article's caption, then the
+   Commons description. An entry is tried first; if its file fails to load, the
+   article's own lead image is used as a backup. Run imageAudit() in the
+   browser console for a table of every site's image state.
    =================================================================== */
-  window.IMG = {
-    'Sechín Alto': ['File:Sechín Archaeological site - relief (warrior).jpg', 'Carved warrior at neighbouring Cerro Sechín'],
-    'Paithan': ['File:Coin of Satkarni.jpg', 'Satavahana coin of Satakarni'],
-    'Memphis': ['File:Pyramid_of_Djoser.jpg', 'Pyramid of Djoser'],
-    'Ur': ['File:Ziggurat_of_UrInbound1427286134917083377.jpg', 'Ziggurat of Ur'],
-    'Uruk': ['File:White_Temple_ziggurat_in_Uruk.jpg', 'White Temple ziggurat in Uruk'],
-    'Dashly Oasis': ['File:Compartmented_Seal_with_Bird-Headed_Man_with_Snakes_LACMA_AC1995.5.6.jpg','Bird-headed man with snakes from the Bactria–Margiana Archaeological Complex'],
-    'Pataliputra': ['File:Ruins_of_Patliputra_at_Kumhrar.JPG', 'Ruins of Pataliputra at Kumhrar'],
-    'Sri Ksetra': ['File:20160810_Bawbawgyi_Pogoda_Sri_Ksetra_Pyay_Myanmar_9252.jpg', 'Baw Baw Gyi Paya Buddhist stūpa'],
-    'Xianyang & Haojing': ['File:2015-09-22-081415_-_Terrakotta-Armee,_Grosse_Halle.jpg', 'Mausoleum of the First Qin Emperor containing the Terracotta Army'],
-    'Angkor': ['File:Angkor_Wat.jpg', 'Angkor Wat'],
-    'Cổ Loa': ['File:An_Duong_Vuong_Temple_Gate_Co_Loa.jpg', 'Temple of An Dương Vương, founder of the kingdom of Âu Lạc, at Cổ Loa'],
-    'Liangzhu': ['File:Center of the model of Liangzhu Ancient City.jpg', 'A Model of Liangzhu Ancient City'], // could be better 
-    'Jericho': ['File:Ziko.jpg','The Tower of Jericho (8000 BCE) at Tell es-Sultan'],
-    // Colliseum: File:Colosseo_2020.jpg
-    // Pantheon: File:20190406-DSC5193_Panteon.jpg
-    // Roman Forum: File:Foro_Romano_visto_dai_Musei_Capitolini_Roma.jpg'
-    'Rome': ['File:20190406-DSC5193_Panteon.jpg', "The Pantheon"], 
-    'Poviglio': ['File:Ricostruzione_grafica_della_Terramara_di_Montale_(Modena),_disegno_di_Riccardo_Merlo.jpg', 'Terramare of Montale, reconstruction'],
-    'Hemudu': ['File:Hemudu-Diorama-Aaron-Delehanty.jpg', 'Model of a Hemudu Neolithic Settlement'],
-    'Shijiahe': ['File:Characters_from_Shijiahe_Culture,_Hubei_(10185323866).jpg', 'Carved Marks of Shijiahe Culture'],
-    'Yin': ['File:Yinxu_-_殷墟_(5066593365).jpg', 'A model of the Royal Palace Complex of Yin'],
-    'Erlitou': ['File:嵌绿松石铜牌饰（81YLVM4）,_2024-06-22.jpg', 'A turquoise-inlaid bronze plaque recovered from Erlitou'],
-    'Taosi' : ['File:Painted_Pottery_Plate_with_Dragon_Design_Taosi_Culture,_Early_Period_(2,300—2,100_BCE)_Excavated_at_the_Taosi_Site,_Xiangfen_County,_Shanxi._Capital_Museum,_Beijing.jpg', 'Taosi Culture Painted Pottery Plate with Dragon Design'],
-    // 'Ganweriwala': false,      // use false to show no picture at all
-  };
+window.IMG = {
+
+  /* ================= ADDED BY HAND =================
+     Chosen deliberately. Left in the order they were written.
+     ================================================= */
+  'Sechín Alto':
+    ['File:Sechín Archaeological site - relief (warrior).jpg',
+     'Carved warrior at neighbouring Cerro Sechín',
+     'AgainErick · CC BY-SA 3.0'],
+  'Paithan':
+    ['File:Coin of Satkarni.jpg',
+     'Satavahana coin of Satakarni',
+     'User:Ancientcoinsofindia1 , English Wikipedia · CC BY 2.5'],
+  'Memphis':
+    ['File:Pyramid_of_Djoser.jpg',
+     'Pyramid of Djoser',
+     'Gary Ku from New Haven, CT, USA · CC BY-SA 2.0'],
+  'Ur':
+    ['File:Ziggurat_of_UrInbound1427286134917083377.jpg',
+     'Ziggurat of Ur',
+     'مجتبى حميد (Mojtaba Hamid) · CC BY-SA 4.0'],
+  'Uruk':
+    ['File:White_Temple_ziggurat_in_Uruk.jpg',
+     'White Temple ziggurat in Uruk',
+     'tobeytravels · CC BY-SA 2.0'],
+  'Dashly Oasis':
+    ['File:Compartmented_Seal_with_Bird-Headed_Man_with_Snakes_LACMA_AC1995.5.6.jpg',
+     'Bird-headed man with snakes from the Bactria–Margiana Archaeological Complex',
+     'Public domain'],
+  'Pataliputra':
+    ['File:Ruins_of_Patliputra_at_Kumhrar.JPG',
+     'Ruins of Pataliputra at Kumhrar',
+     'Manoj nav at en.wiki · Public domain'],
+  'Sri Ksetra':
+    ['File:20160810_Bawbawgyi_Pogoda_Sri_Ksetra_Pyay_Myanmar_9252.jpg',
+     'Baw Baw Gyi Paya Buddhist stūpa',
+     'Jakub Hałun · CC BY-SA 4.0'],
+  'Xianyang & Haojing':
+    ['File:2015-09-22-081415_-_Terrakotta-Armee,_Grosse_Halle.jpg',
+     'Mausoleum of the First Qin Emperor containing the Terracotta Army',
+     'Zossolino · CC BY-SA 4.0'],
+  'Angkor':
+    ['File:Angkor_Wat.jpg',
+     'Angkor Wat',
+     'Bjørn Christian Tørrissen · CC BY-SA 4.0'],
+  'Cổ Loa':
+    ['File:An_Duong_Vuong_Temple_Gate_Co_Loa.jpg',
+     'Temple of An Dương Vương, founder of the kingdom of Âu Lạc, at Cổ Loa',
+     'Julez A. · CC BY-SA 4.0'],
+  'Liangzhu':
+    ['File:Center of the model of Liangzhu Ancient City.jpg',
+     'A Model of Liangzhu Ancient City',
+     'Siyuwj · CC BY-SA 4.0'],  // could be better
+  'Jericho':
+    ['File:Ziko.jpg',
+     'The Tower of Jericho (8000 BCE) at Tell es-Sultan',
+     'Salamandra123 · CC BY-SA 3.0'],
+  'Rome':
+    ['File:20190406-DSC5193_Panteon.jpg',
+     'The Pantheon',
+     'Jfabrix101 · CC BY-SA 4.0'],  // alternatives: File:Colosseo_2020.jpg, File:Foro_Romano_visto_dai_Musei_Capitolini_Roma.jpg
+  'Poviglio':
+    ['File:Ricostruzione_grafica_della_Terramara_di_Montale_(Modena),_disegno_di_Riccardo_Merlo.jpg',
+     'Terramare of Montale, reconstruction',
+     'Riccardo Merlo · CC BY-SA 3.0'],
+  'Hemudu':
+    ['File:Hemudu-Diorama-Aaron-Delehanty.jpg',
+     'Model of a Hemudu Neolithic Settlement',
+     'Adelehant · CC BY-SA 4.0'],
+  'Shijiahe':
+    ['File:Characters_from_Shijiahe_Culture,_Hubei_(10185323866).jpg',
+     'Carved Marks of Shijiahe Culture',
+     'Gary Todd from Xinzheng, China · CC0'],
+  'Yin':
+    ['File:Yinxu_-_殷墟_(5066593365).jpg',
+     'A model of the Royal Palace Complex of Yin',
+     'tak.wing · CC BY-SA 2.0'],
+  'Erlitou':
+    ['File:嵌绿松石铜牌饰（81YLVM4）,_2024-06-22.jpg',
+     'A turquoise-inlaid bronze plaque recovered from Erlitou',
+     'Siyuwj · CC BY-SA 4.0'],
+  'Taosi':
+    ['File:Painted_Pottery_Plate_with_Dragon_Design_Taosi_Culture,_Early_Period_(2,300—2,100_BCE)_Excavated_at_the_Taosi_Site,_Xiangfen_County,_Shanxi._Capital_Museum,_Beijing.jpg',
+     'Taosi Culture Painted Pottery Plate with Dragon Design',
+     'Fo Guang Shan 佛光山 · CC BY-SA 4.0'],
+
+  /* ============= ADDED AUTOMATICALLY ==============
+     Pulled from each article's lead image, its infobox caption (or the
+     Commons file description), and the Commons author and licence.
+     Serviceable, not curated: replace freely, and move an entry up into
+     the section above once you have.
+     ================================================ */
+
+  /* ---- Africa ---- */
+  'Djenné-Djenno':
+    ['File:Seated_figure_grom_Mali,_13th_century,_Djenné_peoples,_Metropolitan_Museum_of_Art,_1981.218.JPG',
+     'Terracotta seated figure, 13th century, Djenné peoples, Metropolitan Museum of Art',
+     'Wmpearl · CC0'],
+  'Kerma':
+    ['File:Kerma_city.JPG',
+     'Ancient city of Kerma',
+     'Lassi · CC BY-SA 4.0'],
+  'Mapungubwe':
+    ['File:MapungubweHill.jpg',
+     'Mapungubwe Hill',
+     'JJ van Zyl · CC BY-SA 3.0'],
+  'Meroë':
+    ['File:NubianMeroePyramids30sep2005(2).jpg',
+     'Pyramids of the Kushite rulers at Meroë, covering a period from 300 BC to about 350 AD',
+     'Wufei07 · Public domain'],
+  'Thebes':
+    ['File:Decorated_pillars_of_the_temple_at_Karnac,_Thebes,_Egypt._Co_Wellcome_V0049316.jpg',
+     'Pillars of the Great Hypostyle Hall, in The Holy Land, Syria, Idumea, Arabia, Egypt, and Nubia',
+     'CC BY 4.0'],
+
+  /* ---- West Asia ---- */
+  'Assur':
+    ['File:Ziqqurat_Ashur_and_Ashur_city_walls.jpg',
+     'Ziqqurat Ashur and Ashur city walls',
+     'Fakhri Mahmood · CC BY-SA 4.0'],
+  'Babylon':
+    ['File:Ishtar_Gate.jpg',
+     'Replica of the Ishtar Gate',
+     'David Stanley · CC BY-SA 3.0'],
+  'Chogha Zanbil':
+    ['File:زیگورات_چغا_زنبیل.jpg',
+     'Interactive map of Chogha Zanbil',
+     'Mobina ghanbaryan · CC BY-SA 4.0'],
+  'Eridu':
+    ['File:Ziggurat_at_Eridu_(30809118442).jpg',
+     'Ruins of a ziggurat at Eridu',
+     'David Stanley from Nanaimo, Canada · CC BY 2.0'],
+  'Girsu':
+    ['File:Statue_of_Gudea,_Metropolitan_Museum_of_Art.jpg',
+     'Statue of Gudea, named “Gudea, the man who built the temple, may his life be long”. Metropolitan Museum of Art 59.2.[3]',
+     'Metropolitan Museum of Art CC0 1.0 Universal (CC0 1.0) Public Domain Dedication per information on webpage · CC0'],
+  'Göbekli Tepe':
+    ['File:Göbekli_Tepe,_Urfa.jpg',
+     'Main excavation area',
+     'Teomancimit · CC BY-SA 3.0'],
+  'Mari':
+    ['File:MariZiggurat.jpg',
+     'Ruins of Mari',
+     'Heretiq · CC BY-SA 2.5'],
+  'Nineveh':
+    ['File:Nineveh_-_Mashki_Gate.jpg',
+     'The reconstructed Mashki Gate of Nineveh (since destroyed by the Islamic State)',
+     'Omar Siddeeq Yousif · CC BY-SA 4.0'],
+  'Nippur':
+    ['File:Ruins_from_a_temple_in_Naffur.jpg',
+     'Ruins of a temple platform in Nippur—the brick structure on top was constructed by American archaeologists around 1900.',
+     'Jasmine N. Walthall, U.S. Army · Public domain'],
+  'Persepolis':
+    ['File:Persepolis_east_side_at_spring.jpg',
+     'Interactive map of Persepolis',
+     'Masoudkhalife · CC BY-SA 4.0'],
+  'Susa':
+    ['File:History_of_Egypt,_Chaldea,_Syria,_Babylonia_and_Assyria_(1903)_(14584070300).jpg',
+     'The Palace of Darius in Susa',
+     'Internet Archive Book Images · No restrictions'],
+  'Çatalhöyük':
+    ['File:Çatalhöyük,_7400_BC,_Konya,_Turkey_-_UNESCO_World_Heritage_Site,_08.jpg',
+     'Çatalhöyük in 2019',
+     'Murat Özsoy 1958 · CC BY-SA 4.0'],
+
+  /* ---- Central Asia ---- */
+  'Gonur Tepe':
+    ['File:Gonur_ruins.jpg',
+     'Part of the Gonur Depe ruins, 2011',
+     'David Stanley · CC BY 2.0'],
+  'Mundigak':
+    ['File:Afgh02-02-02.jpg',
+     'Mother goddess figures from Mundigak (left) and Deh Morasi Ghundai (right), Kandahar province, Afghanistan: Baked clay. 3rd millenium BC.',
+     '1951-58 Casal, DAFA - excavations: http://www.dafa.org.af/ · Public domain'],
+  'Shahr-e Sukhteh':
+    ['File:C20R1002.jpg',
+     'The site in 2016',
+     'Amirkhan33 · CC BY-SA 4.0'],
+
+  /* ---- South Asia ---- */
+  'Ganweriwala':
+    ['File:IndusValleySeals.JPG',
+     'Examples of seals found in the Indus Valley',
+     'World Imaging · CC BY-SA 3.0'],
+  'Harappa':
+    ['File:View_of_Granary_and_Great_Hall_on_Mound_F_-_Archaeological_site_of_Harappa.jpg',
+     'A view of Harappa\'s Granary and Great Hall',
+     'Muhammad Bin Naveed · CC BY-SA 3.0'],
+  'Hastinapura':
+    ['File:Kailash_Parvat_Rachna_-_2.jpg',
+     'Kailash Parvat Rachna',
+     'Pratyk321 · CC BY-SA 4.0'],
+  'Kalibangan':
+    ['File:Westernmound.jpg',
+     'The western mound of Kalibangan, known as the Citadel',
+     'Kk himalaya · Public domain'],
+  'Lothal':
+    ['File:The_drainage_system_at_Lothal_2.JPG',
+     'Archaeological remains of the drainage system, 2012',
+     'Abhilashdvbk · CC BY-SA 3.0'],
+  'Mehrgarh':
+    ['File:Mehrgarh_ruins.jpg',
+     'Ruins of houses at Mehrgarh, Balochistan',
+     'Ashish_Premier · CC BY-SA 3.0'],
+  'Mohenjo-daro':
+    ['File:Mohenjodaro_-_view_of_the_stupa_mound.JPG',
+     'The site in 2014',
+     'Saqib Qayyum · CC BY-SA 3.0'],
+  'Rakhigarhi':
+    ['File:Rakhigarhi_Harappan_civilization.jpg',
+     'This is another pics of same Rakhigarhi Harappan civilization',
+     'Durgeshkushvaha · CC BY-SA 4.0'],
+  'Varanasi':
+    ['File:Varanasi,_India,_Ghats,_Cremation_ceremony_in_progress.jpg',
+     'In Shivaism creation and destruction are part of a single whole. Pale blue smoke rises into the air from this sacred site where those lucky enough to die in…',
+     'Vyacheslav Argenberg · CC BY 4.0'],
+
+  /* ---- East Asia ---- */
+  'Banpo':
+    ['File:Yangshao_Village_Diorama.jpg',
+     'Reconstructed diorama of a village at Banpo',
+     'Gary Todd · CC0'],
+  'Sanxingdui':
+    ['File:Gold_Mask_(黄金面罩).jpg',
+     'Sanxingdui bronze head wearing a gold foil mask.',
+     'momo · CC BY 2.0'],
+
+  /* ---- Southeast Asia ---- */
+  'Palembang':
+    ['File:Srivijaya_Empire.svg',
+     'Maximum extent of Srivijaya Empire around 8th century. Expanding from Sumatra, Central Java, to Malay Peninsula. The red arrows show the series of Srivijayan…',
+     'Gunawan Kartapranata · CC BY-SA 3.0'],
+  'Óc Eo':
+    ['File:Núi_Ba_Thê.jpg',
+     'Núi Ba Thê, thị trấn Óc Eo, huyện Thoại Sơn, An Giang.',
+     'Bùi Thụy Đào Nguyên · CC BY-SA 3.0'],
+
+  /* ---- Europe ---- */
+  'Lepenski Vir':
+    ['File:Lepenski_Vir_(2).JPG',
+     'Lepenski Vir site - scaled size display under glass roof',
+     'Myself · CC BY 3.0'],
+  'Spina':
+    ['File:Museo_di_Spina_sala_3,_Ferrara_-_Pittore_di_Pentesilea_-_Zeus_e_Ganimede.jpg',
+     'top view',
+     'Giovanni Dall\'Orto · Attribution'],
+  'Vinča':
+    ['File:Neolithic_vinca_culture_en.png',
+     'Map showing the extent of the Vinča culture',
+     'WikiEditor2004 · CC0'],
+
+  /* ---- North America ---- */
+  'Aztec Ruins':
+    ['File:Aztec_Ruins_National_Monument_by_RO.JPG',
+     'Interactive map of Aztec Ruins National Monument',
+     'Rationalobserver · CC BY-SA 4.0'],
+  'Cahokia':
+    ['File:Monks_Mound_-_Summer_2024.jpg',
+     'Monks Mound is the largest earthen structure at Cahokia (for scale, people below and on top). About 80 earthen mounds or earthworks survive at the archeology…',
+     'Skubasteve834 · CC BY 4.0'],
+  'Casa Grande':
+    ['File:CasaGrandeRuin.jpg',
+     'The southern facade of the "Big House"',
+     'Greg Hume · CC BY-SA 3.0'],
+  'Newark Earthworks':
+    ['File:Newark_Earthworks_Wall_and_Moat.jpg',
+     'View along the main wall and the moat from the outside the Great Circle. The break in the wall - the traditional entrance - is visible in the far distance.',
+     'Ericplayzbass · CC BY-SA 4.0'],
+  'Poverty Point':
+    ['File:Louisiana_-_Poverty_Point_-_Karte_(English_version).png',
+     'A map of the Poverty Point site',
+     'Maximilian Dörrbecker ( Chumwa ) · CC BY-SA 2.5'],
+  'Snaketown':
+    ['File:Excavated_Ballcourt_at_Snaketown.jpg',
+     'Excavated possible ballcourt at Snaketown in 1935. It has since been backfilled.',
+     'Fair use'],
+
+  /* ---- Mesoamerica ---- */
+  'La Venta':
+    ['File:La_Venta_Pirámide_cara_norte.jpg',
+     'La Venta pyramid',
+     'Alfonsobouchot · Public domain'],
+  'Monte Albán':
+    ['File:Monte_Alban_West_Side_Platform.jpg',
+     'The west side platform at the Monte Alban pyramid complex',
+     'nsaum75 !Dígame¡ ‎ · CC BY-SA 3.0'],
+  'Palenque':
+    ['File:Palenque_Collage.jpg',
+     'Collage of Palenque',
+     'Ricraider · CC BY-SA 3.0'],
+  'San Lorenzo':
+    ['File:CabezaColosal1_MuseoXalapa_v1.1.jpg',
+     'Colossal Head 1 from San Lorenzo, Museo de Antropología de Xalapa',
+     'CC BY-SA 3.0'],
+  'Teotihuacan':
+    ['File:ZA77_Teotihuacán_edo_de_mex_Herberto_de_la_rosa.jpg',
+     'Aerial view of the city, featuring the Pyramid of the Sun, the Pyramid of the Moon (background), and the Avenue of the Dead.',
+     'Hdlrosa · CC BY-SA 4.0'],
+  'Yaxchilán':
+    ['File:Foto_en_la_Zona_Arqueológica_de_Yaxchilan_01.jpg',
+     'Structure 33 at Yaxchilan',
+     'ZoRrO0880 · CC BY-SA 4.0'],
+
+  /* ---- South America ---- */
+  'Bacatá':
+    ['File:ConfederaciónMuisca.png',
+     'Muisca Confederation Map; Zaque, Zipa, and Independent territory labeled',
+     'Popayan1210 · CC0'],
+  'Cahuachi':
+    ['File:Cahuachi.jpg',
+     'Adobe pyramids at Cahuachi',
+     'Ingo Mehling · CC BY-SA 3.0'],
+  'Caral':
+    ['File:Mayor_Pyramid_and_circular_enclosure._Caral,_Peru.jpg',
+     'The site in 2016',
+     'Jon Gudorf Photography · CC BY-SA 2.0'],
+  'Chan Chan':
+    ['File:Chan_chan_view1.jpg',
+     'Interactive map of Chan Chan',
+     'Håkan Svensson · CC BY-SA 3.0'],
+  'Chankillo':
+    ['File:ThirteenTowersOfChanquilloFromFortress.JPG',
+     'Thirteen Towers of Chankillo, viewed from the fortress',
+     'David Edgar · CC BY-SA 3.0'],
+  'Chavín de Huántar':
+    ['File:Chavín_de_Huántar_-_51149086708.jpg',
+     'Overview of Chavín de Huántar',
+     'Apollo⠀ · CC BY 2.0'],
+  'Cusco':
+    ['File:Vista_Calle_Suecia.jpg',
+     'Interactive map of Cusco',
+     'tomscoffin · CC BY 2.0'],
+  'Huacas de Moche':
+    ['File:Huaca_Sol_lou.jpg',
+     'Panoramic view of temple or Huaca of the Sun',
+     'CC BY-SA 3.0'],
+  'Kuhikugu':
+    ['File:Kuhikugu_complex.png',
+     'Complexe archéologique de Kihikugu',
+     'Gargamail · CC BY-SA 4.0'],
+  'Llanos de Moxos':
+    ['File:Beni_Department_aérea_25.jpg',
+     'Map of Bolivia\'s ecoregions. The Beni savanna is hatched bright green.',
+     'Sam Beebe · CC BY-SA 2.0'],
+  'Machu Picchu':
+    ['File:Machu_Picchu,_2023_(012).jpg',
+     'Machu Picchu in 2023',
+     'Draceane · CC BY-SA 4.0'],
+  'Marajó':
+    ['File:Burian_urn,_AD_1000-1250,_Marajoara_culture_-_AMNH_-_DSC06177_b.jpg',
+     'Exhibit in the South American collection of the American Museum of Natural History, Manhattan, New York City, New York, USA. Photography was permitted in the…',
+     'Daderot · CC0'],
+  'Pachacamac':
+    ['File:Pachacamac_-_51163366566.jpg',
+     'View of Pachacámac',
+     'Apollo⠀ · CC BY 2.0'],
+  'Pukara':
+    ['File:Mapa_cultura_pucara.png',
+     'Area of influence',
+     'CC BY-SA 2.5'],
+  'San Agustín':
+    ['File:Parque_Arqueológico_de_San_Agustín-Mesita_A_06.jpg',
+     'A tomb platform with supporting statues',
+     'Bernard Gagnon · CC BY-SA 4.0'],
+  'Santarém':
+    ['File:Catedral_Metropolitana_de_Santarém,_Santarém,_Pará,_2007.jpg',
+     'Cathedral of Santárem, Pará, Brazil',
+     'Lopmed · Public domain'],
+  'Tiwanaku':
+    ['File:PUERTA_DEL_SOL_TIWANAKU.jpg',
+     'The "Gate of the Sun"',
+     'CLAUDIOLD · CC BY-SA 4.0'],
+  'Áspero':
+    ['File:Aspero.jpg',
+     '3D reconstruction of one of the temples of Aspero',
+     'Dravinia · CC BY-SA 4.0'],
+};
   </script>
 
 
@@ -1013,19 +1375,91 @@ addEventListener('pointermove',e=>{px=e.clientX;py=e.clientY;if(tipOn)placeTip()
 const WC={};
 /* Wikimedia's image host is sometimes unreachable from an embedded frame, so keep
    several routes to the same picture and use whichever one actually loads. */
-function commonsURLs(f){
-  f=String(f).replace(/^\s*(File|Image)\s*:\s*/i,'').replace(/ /g,'_');
-  const e=encodeURIComponent(f);
-  return ['https://commons.wikimedia.org/wiki/Special:FilePath/'+e+'?width=800',
-          'https://en.wikipedia.org/wiki/Special:Redirect/file/'+e+'?width=800'];
+/* Compact MD5. Wikimedia derives a thumbnail's path from the MD5 of the file
+   name, so computing it here means we can hit the image CDN directly instead of
+   bouncing through a MediaWiki redirect that also has to generate the thumb. */
+function md5(str){
+  const S=[7,12,17,22,7,12,17,22,7,12,17,22,7,12,17,22,5,9,14,20,5,9,14,20,5,9,14,20,
+           5,9,14,20,4,11,16,23,4,11,16,23,4,11,16,23,4,11,16,23,6,10,15,21,6,10,15,21,
+           6,10,15,21,6,10,15,21];
+  const K=new Int32Array(64);
+  for(let i=0;i<64;i++)K[i]=(Math.abs(Math.sin(i+1))*4294967296)|0;
+  const bytes=new TextEncoder().encode(str), len=bytes.length;
+  const blocks=((len+8)>>6)+1, buf=new Uint8Array(blocks*64);
+  buf.set(bytes);buf[len]=0x80;
+  const dv=new DataView(buf.buffer), bits=len*8;
+  dv.setUint32(blocks*64-8,bits>>>0,true);
+  dv.setUint32(blocks*64-4,Math.floor(bits/4294967296),true);
+  let a0=0x67452301,b0=0xefcdab89,c0=0x98badcfe,d0=0x10325476;
+  const M=new Int32Array(16), rot=(x,c)=>(x<<c)|(x>>>(32-c));
+  for(let i=0;i<blocks;i++){
+    for(let j=0;j<16;j++)M[j]=dv.getInt32(i*64+j*4,true);
+    let A=a0,B=b0,C=c0,D=d0;
+    for(let j=0;j<64;j++){
+      let F,g;
+      if(j<16){F=(B&C)|(~B&D);g=j;}
+      else if(j<32){F=(D&B)|(~D&C);g=(5*j+1)%16;}
+      else if(j<48){F=B^C^D;g=(3*j+5)%16;}
+      else{F=C^(B|~D);g=(7*j)%16;}
+      F=(F+A+K[j]+M[g])|0;A=D;D=C;C=B;B=(B+rot(F,S[j]))|0;
+    }
+    a0=(a0+A)|0;b0=(b0+B)|0;c0=(c0+C)|0;d0=(d0+D)|0;
+  }
+  return [a0,b0,c0,d0].map(n=>{let h='';
+    for(let i=0;i<4;i++)h+=((n>>>(i*8))&255).toString(16).padStart(2,'0');return h;}).join('');
+}
+const fileName=f=>String(f).replace(/^\s*(File|Image)\s*:\s*/i,'').replace(/ /g,'_');
+/* MediaWiki percent-encodes a few characters encodeURIComponent leaves alone;
+   matching it exactly keeps us on the CDN's cached path. */
+const encFile=f=>encodeURIComponent(f).replace(/[()']/g,c=>'%'+c.charCodeAt(0).toString(16).toUpperCase());
+/* Widths Wikimedia already has cached. Asking for an arbitrary size makes the
+   thumbnailer work, which is the slow path. */
+const WIDTHS=[320,480,640,800,1024,1280];
+function pickWidth(px){
+  const want=Math.round(px*(window.devicePixelRatio||1));
+  return WIDTHS.find(w=>w>=want)||WIDTHS[WIDTHS.length-1];
+}
+/* Firefox's OpaqueResponseBlocking rejects cross-origin no-cors responses in
+   some contexts, which kills a plain <img> pointed at the image CDN. Loading
+   those URLs as CORS requests sidesteps it — upload.wikimedia.org sends
+   Access-Control-Allow-Origin: *. Only that host is treated this way; an
+   arbitrary URL you supply might not send the header, and requesting CORS
+   where it is unavailable would break a load that would otherwise work. */
+const CDN='https://upload.wikimedia.org/';
+/* If the CDN keeps failing anyway, stop putting it first. One wasted request
+   per session rather than one per image. */
+let cdnFails=0;
+const cdnWorth=()=>cdnFails<2;
+function commonsURLs(f,width){
+  const n=fileName(f), e=encFile(n), w=width||640;
+  const urls=[];
+  /* svg, tiff and friends follow different thumbnail naming rules */
+  if(cdnWorth()&&!/\.(svg|tiff?|pdf|webm|ogv|gif)$/i.test(n)){
+    const h=md5(n);
+    urls.push(CDN+'wikipedia/commons/thumb/'+h[0]+'/'+h.slice(0,2)+'/'+e+'/'+w+'px-'+e);
+  }
+  /* Fallbacks: a file smaller than the requested width has no such thumb, and a
+     file hosted on en.wikipedia rather than Commons is not under that path. */
+  urls.push('https://commons.wikimedia.org/wiki/Special:FilePath/'+e+'?width='+w,
+            'https://en.wikipedia.org/wiki/Special:Redirect/file/'+e+'?width='+w,
+            'https://commons.wikimedia.org/wiki/Special:FilePath/'+e);
+  return urls;
 }
 function override(name){
   const has=Object.prototype.hasOwnProperty.call(IMG,name);
   const e=has?IMG[name]:undefined;
   if(!has||e===undefined)return {urls:[],cap:null,off:false};
   if(e===false||e===null||e==='')return {urls:[],cap:null,off:true};
-  const v=Array.isArray(e)?e[0]:e, cap=Array.isArray(e)?(e[1]||null):null;
-  return {urls:/^(https?:|data:|blob:)/i.test(v)?[v]:commonsURLs(v),cap,off:false};
+  let v=e, cap=null, credit;
+  if(Array.isArray(e)){v=e[0];cap=e[1]||null;if(e.length>2)credit=e[2]||'';}
+  else if(typeof e==='object'){
+    v=e.file||e.url||'';
+    cap=e.caption||null;
+    if('credit' in e)credit=e.credit||'';        // '' or false suppresses it
+  }
+  const direct=/^(https?:|data:|blob:)/i.test(v);
+  return {urls:direct?[v]:commonsURLs(v),file:direct?null:fileName(v),
+          direct,cap,credit,off:false};
 }
 function imgURLs(thumb){
   if(!thumb)return [];
@@ -1052,12 +1486,76 @@ function fitShot(box,im){
   }
 }
  
+function cardURLs(ov,box){
+  return ov.direct?ov.urls:commonsURLs(ov.file,pickWidth(box.clientWidth||300));
+}
+function setCredit(capt,shot,t){
+  if(!t)return;
+  const el=document.createElement('p');
+  el.className='credit';el.textContent=t;
+  (capt.isConnected?capt:shot).insertAdjacentElement('afterend',el);
+}
+/* A src that has actually loaded, per site. The candidate list is a chain of
+   fallbacks and the last resort is a blob, so the URL that works is not
+   knowable in advance — the tooltip reuses whatever did. */
+const IMGSRC={},CARDSRC={};
+function showImage(s,shot,cap,capt,ov,urls,url){
+  loadFirst(urls,(im,u)=>{
+    CARDSRC[s.n]=im.currentSrc||im.src;
+    if(cur!==s)return;
+    im.alt=s.n+' \u2014 image';im.className='';
+    fitShot(shot,im);
+    shot.insertBefore(im,cap);
+    requestAnimationFrame(()=>im.classList.add('in'));
+    cap.remove();                                     // the "loading" placeholder
+    fillCaption(s,shot,capt,ov,u);
+  },()=>{
+    if(cur!==s)return;
+    capt.remove();
+    shot.classList.add('empty');
+    cap.innerHTML='Image did not load &mdash; <a href="'+url+'" target="_blank" rel="noopener">see the article</a>. '
+      +'Supply your own in the IMG map.';
+  });
+}
+/* Caption: yours, then the article's body caption, then its infobox caption,
+   then the Commons description. Credit: yours, else the Commons author and
+   licence. Each lookup happens only if something is still missing. */
+async function fillCaption(s,shot,capt,ov,u){
+  const mine=!ov.off&&ov.urls.length>0;
+  const file=(mine&&ov.file)||fileFromURL(u);
+  let text=(mine&&ov.cap)||'';
+  const wantCredit=!(mine&&ov.credit!==undefined);
+  if(text)capt.textContent=trimText(text,220);
+  if(!wantCredit)setCredit(capt,shot,ov.credit);
+  if(text&&!wantCredit)return;                        // nothing left to look up
+  if(!text){
+    const c=await captions(s.w);
+    if(cur!==s)return;
+    const thumbFile=fileFromURL((c&&c.thumb)||'');
+    text=(c&&c.caps&&c.caps[file])||(file&&file===thumbFile&&c&&c.leadCap)||'';
+    if(text)capt.textContent=trimText(text,220);
+  }
+  if(!text||wantCredit){
+    const m=await fileMeta(file);
+    if(cur!==s)return;
+    if(!text){
+      const d=m&&usableDesc(m.desc)?m.desc:'';
+      if(d)capt.textContent=trimText(d,220);
+      else capt.remove();
+    }
+    if(wantCredit&&m)setCredit(capt,shot,[m.artist,m.lic].filter(Boolean).join(' \u00b7 '));
+  }
+}
+
 function loadFirst(urls,ok,fail){
   let i=0,j=0;
   const next=()=>{
     if(i>=urls.length)return viaBlob();
     const u=urls[i++],im=new Image();
-    im.onload=()=>ok(im,u);im.onerror=next;im.src=u;
+    if(u.startsWith(CDN))im.crossOrigin='anonymous';    // avoids ORB
+    im.onload=()=>{if(u.startsWith(CDN))cdnFails=0;ok(im,u)};
+    im.onerror=()=>{if(u.startsWith(CDN))cdnFails++;next()};
+    im.src=u;
   };
   /* if <img> is blocked outright, try fetching the bytes and rendering a blob */
   const viaBlob=()=>{
@@ -1073,6 +1571,9 @@ function loadFirst(urls,ok,fail){
 /* File name out of any of the image URL shapes we might have loaded. */
 function fileFromURL(u){
   try{
+    /* Only Wikimedia-hosted images have a Commons file page. Without this guard
+       a URL ending in p.jpg would pick up whatever File:P.jpg happens to be. */
+    if(!/^https?:\/\/[^/]*(wikimedia|wikipedia)\.org\//i.test(String(u)))return '';
     const t=decodeURIComponent(String(u).split('?')[0]);
     let m=t.match(/Special:(?:Redirect\/file|FilePath)\/(.+)$/);
     if(!m)m=t.match(/\/thumb\/[^/]+\/[^/]+\/([^/]+)\//);
@@ -1084,6 +1585,16 @@ function fileFromURL(u){
 /* Commons keeps a description, author and licence on each file page. Reached
    through the same API en.wikipedia serves, which allows anonymous CORS. */
 const FC={};
+/* Heritage photo campaigns stamp files with boilerplate instead of a
+   description. It is worse than no caption at all. */
+function usableDesc(t){
+  if(!t)return false;
+  return !/^this is a photo of|identified by the id|identified as the|wiki loves|cultural heritage monument|listed in the (national|state)/i.test(t.trim());
+}
+function trimText(t,max){
+  t=String(t||'').replace(/\s+/g,' ').trim();
+  return t.length>max ? t.slice(0,max).replace(/[\s,;:.]+\S*$/,'')+'\u2026' : t;
+}
 function cleanDesc(html){
   let t='';
   try{
@@ -1091,9 +1602,7 @@ function cleanDesc(html){
     const en=doc.querySelector('[lang=en],[lang^="en-"]');
     t=((en||doc.body).textContent||'').replace(/\s+/g,' ').trim();
   }catch(e){t=String(html||'').replace(/<[^>]+>/g,' ').replace(/\s+/g,' ').trim()}
-  t=t.replace(/^English:\s*/i,'');
-  if(t.length>190)t=t.slice(0,190).replace(/[\s,;:.]+\S*$/,'')+'\u2026';
-  return t;
+  return t.replace(/^English:\s*/i,'');
 }
 
 function fileMeta(file){
@@ -1107,7 +1616,7 @@ function fileMeta(file){
     const page=j&&j.query&&Object.values(j.query.pages)[0];
     const md=page&&page.imageinfo&&page.imageinfo[0]&&page.imageinfo[0].extmetadata;
     const val=k=>(md&&md[k]&&md[k].value)||'';
-    const o=md?{desc:cleanDesc(val('ImageDescription')),
+    const o=md?{desc:trimText(cleanDesc(val('ImageDescription')),220),
                 artist:cleanDesc(val('Artist')).replace(/\u2026$/,''),
                 lic:cleanDesc(val('LicenseShortName'))}:null;
     FC[file]=o;return o;
@@ -1118,24 +1627,70 @@ function wiki(slug){
   if(slug in WC)return Promise.resolve(WC[slug]);
   const API='https://en.wikipedia.org/api/rest_v1/page/', q=encodeURIComponent(slug);
   const summary=fetch(API+'summary/'+q+'?redirect=true').then(r=>r.ok?r.json():null).catch(()=>null);
-  /* media-list carries the caption the article itself prints under each image */
-  const media=fetch(API+'media-list/'+q).then(r=>r.ok?r.json():null).catch(()=>null);
-  return Promise.all([summary,media]).then(([j,m])=>{
+  /* media-list carries the caption the article prints under each body image,
+     but not the infobox one — and the infobox image is usually what we show,
+     so the lead section's HTML is parsed for .infobox-caption as well. */
+  return summary.then(j=>{
     const o={thumb:(j&&j.thumbnail&&j.thumbnail.source)||null,desc:(j&&j.description)||null,
-             file:null,caps:{},ok:null};
-    for(const it of ((m&&m.items)||[])){
-      if(it.type!=='image')continue;
-      const f=String(it.title||'').replace(/^File:/,'').replace(/ /g,'_');
-      if(it.caption&&it.caption.text)o.caps[f]=it.caption.text.trim();
-      if(!o.file&&it.showInGallery)o.file='File:'+f;
-    }
+             file:null,caps:null,leadCap:null,ok:null};
     WC[slug]=o;return o;
   }).catch(()=>{WC[slug]=null;return null});
 }
+
+/* The article's own captions: the body ones from media-list, the infobox one
+   from the lead section's HTML. Two more requests, so they are only made when a
+   caption is actually missing — with the IMG map filled in, never. */
+function captions(slug){
+  return wiki(slug).then(o=>{
+    if(!o||o.caps)return o;
+    const API='https://en.wikipedia.org/api/rest_v1/page/', q=encodeURIComponent(slug);
+    const media=fetch(API+'media-list/'+q).then(r=>r.ok?r.json():null).catch(()=>null);
+    const lead=fetch('https://en.wikipedia.org/w/api.php?action=parse&format=json&origin=*'
+        +'&prop=text&section=0&disablelimitreport=1&disableeditsection=1&redirects=1&page='+q)
+      .then(r=>r.ok?r.json():null).catch(()=>null);
+    return Promise.all([media,lead]).then(([m,l])=>{
+      o.caps={};
+      try{
+        const html=l&&l.parse&&l.parse.text&&l.parse.text['*'];
+        if(html){
+          const doc=new DOMParser().parseFromString(html,'text/html');
+          const cel=doc.querySelector('.infobox-caption');
+          if(cel)o.leadCap=(cel.textContent||'').replace(/\[\d+\]/g,'').replace(/\s+/g,' ').trim();
+        }
+      }catch(e){}
+      for(const it of ((m&&m.items)||[])){
+        if(it.type!=='image')continue;
+        const f=String(it.title||'').replace(/^File:/,'').replace(/ /g,'_');
+        if(it.caption&&it.caption.text)o.caps[f]=it.caption.text.trim();
+        if(!o.file&&it.showInGallery)o.file='File:'+f;
+      }
+      return o;
+    }).catch(()=>o);
+  });
+}
+function tipURLs(s){
+  const ov=override(s.n);
+  if(ov.off)return [];
+  if(ov.direct)return ov.urls;
+  if(ov.file)return commonsURLs(ov.file,320);
+  const w=WC[s.w];
+  return w&&w.thumb?imgURLs(w.thumb):[];
+}
+/* Load the hover image once per site, through the same fallback chain the card
+   uses, then redraw the tooltip if the pointer is still there. */
+function warmTip(s){
+  if(IMGSRC[s.n]!==undefined)return;
+  const urls=tipURLs(s);
+  if(!urls.length){IMGSRC[s.n]=null;return}
+  IMGSRC[s.n]=null;                                   // in flight
+  loadFirst(urls,im=>{
+    IMGSRC[s.n]=im.currentSrc||im.src;
+    if(tipFor===s)showTip(siteTipHTML(s),s);
+  },()=>{IMGSRC[s.n]=null});
+}
 function siteTipHTML(s){
-  const w=WC[s.w],ov=override(s.n),
-        src=ov.off?null:((w&&w.ok)||ov.urls[0]||(w&&w.thumb)||
-             (w&&w.file?commonsURLs(w.file)[0]:null));
+  const ov=override(s.n);
+  const src=ov.off?null:(IMGSRC[s.n]||CARDSRC[s.n]||null);
   return (src?`<img src="${src}" alt="">`:'')
     +`<b>${s.n}</b><span class="tr">${s.role}</span><i>${s.c}</i>`
     +`<em>${span(s)}</em>`
@@ -1145,7 +1700,10 @@ function siteTipHTML(s){
 }
 function tipSite(s){
   showTip(siteTipHTML(s),s);
-  wiki(s.w).then(()=>{if(tipFor===s)showTip(siteTipHTML(s),s)});
+  warmTip(s);
+  const ov=override(s.n);
+  if(!ov.file&&!ov.direct&&!ov.off)                   // no entry: needs the article
+    wiki(s.w).then(()=>{if(tipFor===s)warmTip(s)});
 }
 function tipRiver(k){
   const c=RIVER[k],ss=c.sites;
@@ -1285,6 +1843,7 @@ function renderCard(s){
     <p class="role">${s.role}</p>
     <p class="culture">${s.c}</p>
     <div class="shot" id="shot"><span class="cap" id="cap">Loading image&hellip;</span></div>
+    <p class="capt" id="capt"></p>
     <p class="desc" id="desc"></p>
     <dl class="dl">
       <div><dt>Active</dt><dd>${span(s)}</dd></div>
@@ -1298,51 +1857,31 @@ function renderCard(s){
     ${sib.length?`<p class="reg">Also on this water</p><div class="chips">${sib.map(o=>`<button class="chip" data-n="${o.n}">${o.n}</button>`).join('')}</div>`:''}
     <button class="back" id="backBtn">&larr; All cradles</button></div>`;
   pBody.scrollTop=0;
-  const shot=$('#shot'),cap=$('#cap'),ov=override(s.n);
-  if(ov.off)shot.remove();
+  const shot=$('#shot'),cap=$('#cap'),capt=$('#capt'),ov=override(s.n);
+  if(ov.off){shot.remove();capt.remove()}
+  else if(ov.urls.length){
+    /* The IMG map already names the file, so the image can start loading now
+       rather than after the Wikipedia lookups come back. */
+    showImage(s,shot,cap,capt,ov,cardURLs(ov,shot),url);
+  }
   wiki(s.w).then(w=>{
     if(cur!==s)return;
     if(w&&w.desc)$('#desc').textContent=w.desc;
-    if(ov.off)return;
-    const urls=[...ov.urls,...imgURLs(w&&w.thumb),...(w&&w.file?commonsURLs(w.file):[])];
-    if(!urls.length){
-      shot.classList.add('empty');
-      cap.innerHTML='No image available &mdash; <a href="'+url+'" target="_blank" rel="noopener">see the article</a>. '
-        +'Supply your own in the IMG map.';
-      return;
-    }
-    loadFirst(urls,(im,u)=>{
-      if(w)w.ok=u;
-      if(cur!==s){return}
-      im.alt=s.n+' — image';im.className='';
-      fitShot(shot,im);
-      shot.insertBefore(im,cap);
-      requestAnimationFrame(()=>im.classList.add('in'));
-      const caps=(w&&w.caps)||{}, file=fileFromURL(u);
-      const text=(ov.urls.includes(u)&&ov.cap)||caps[file]||'';
-      if(text){cap.textContent=text;cap.classList.add('prose')}
-      else cap.textContent='';          // drop the "loading" placeholder
-      /* no caption in the article: ask the Commons file page, and credit it */
-      fileMeta(file).then(m=>{
-        if(cur!==s)return;
-        if(!text){
-          if(m&&m.desc){cap.textContent=m.desc;cap.classList.add('prose')}
-          else cap.remove();
-        }
-        if(!m)return;
-        const credit=[m.artist,m.lic].filter(Boolean).join(' \u00b7 ');
-        if(credit){
-          const el=document.createElement('p');
-          el.className='credit';el.textContent=credit;
-          shot.insertAdjacentElement('afterend',el);
-        }
-      });
-      if(!text)setTimeout(()=>{if(cur===s&&!cap.textContent.trim())cap.remove()},4000);
-    },()=>{
+    if(ov.off||ov.urls.length)return;
+    /* Nothing supplied: fall back to the article's own lead image, then to the
+       first image in its media list. */
+    const urls=imgURLs(w&&w.thumb);
+    if(urls.length){showImage(s,shot,cap,capt,ov,urls,url);return}
+    captions(s.w).then(c=>{
       if(cur!==s)return;
-      shot.classList.add('empty');
-      cap.innerHTML='Image did not load &mdash; <a href="'+url+'" target="_blank" rel="noopener">see the article</a>. '
-        +'Supply your own in the IMG map.';
+      const more=c&&c.file?commonsURLs(c.file,pickWidth(shot.clientWidth||300)):[];
+      if(more.length)showImage(s,shot,cap,capt,ov,more,url);
+      else{
+        capt.remove();
+        shot.classList.add('empty');
+        cap.innerHTML='No image available &mdash; <a href="'+url+'" target="_blank" rel="noopener">see the article</a>. '
+          +'Supply your own in the IMG map.';
+      }
     });
   });
   pBody.querySelectorAll('.chip').forEach(b=>b.addEventListener('click',()=>{
